@@ -1,87 +1,142 @@
-import { Box, Container, Grid, Typography, Link, IconButton } from '@mui/material';
-import { Facebook, Twitter, Instagram, LinkedIn, GitHub } from '@mui/icons-material';
+import React from 'react';
+import { Box, Container, Grid, Typography, Link, IconButton, useTheme } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import TwitterIcon from '@mui/icons-material/Twitter';
+import InstagramIcon from '@mui/icons-material/Instagram';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import GitHubIcon from '@mui/icons-material/GitHub';
 
-/**
- * Footer component with links and social media icons
- */
+const StyledFooter = styled(Box)(({ theme }) => ({
+  component: 'footer',
+  padding: theme.spacing(3, 0),
+  width: '100%',
+  maxWidth: '100%',
+  backgroundColor: '#1976d2',
+  color: '#ffffff',
+}));
+
+const StyledContainer = styled(Container)(({ theme }) => ({
+  width: '100%',
+  maxWidth: '100%',
+  padding: theme.spacing(0, 2),
+}));
+
+const StyledGrid = styled(Grid)(({ theme }) => ({
+  padding: theme.spacing(2, 0),
+  '& h6': {
+    fontWeight: 600,
+    marginBottom: theme.spacing(2),
+  },
+}));
+
+const StyledSection = styled(Box)(({ theme }) => ({
+  '& p': {
+    marginBottom: theme.spacing(1.5),
+    color: '#ffffff', // white text for paragraphs
+  },
+  '& a': {
+    textDecoration: 'none',
+    display: 'block',
+    marginBottom: theme.spacing(1),
+    transition: 'color 0.3s ease',
+    color: '#ffffff', // white text for links
+    '&:hover': {
+      color: '#ffffff', // white text on hover
+    },
+  },
+}));
+
+const StyledIcon = styled('div')(({ theme }) => ({
+  cursor: 'pointer',
+  transition: 'all 0.3s ease',
+  '&:hover': {
+    color: theme.palette.primary.main,
+    transform: 'scale(1.1)',
+  },
+  '& svg': {
+    fontSize: '1.5rem',
+  },
+}));
+
+const StyledBox = styled(Box)(({ theme }) => ({
+  marginTop: 'auto',
+  width: '100%',
+  padding: theme.spacing(2, 0),
+}));
+
+const StyledCopyright = styled(Box)(({ theme }) => ({
+  marginTop: theme.spacing(3),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+}));
+
 const Footer = () => {
   return (
-    <Box
-      component="footer"
-      sx={{
-        py: 3,
-        px: 2,
-        mt: 'auto',
-        backgroundColor: (theme) => theme.palette.grey[900],
-        color: 'white',
-      }}
-    >
-      <Container maxWidth="lg">
+    <StyledFooter>
+      <StyledContainer>
         <Grid container spacing={4}>
-          <Grid item xs={12} sm={4}>
-            <Typography variant="h6" color="white" gutterBottom>
-              ShopSmart
+          <StyledGrid item xs={12} sm={4}>
+            <Typography variant="h6" gutterBottom>
+              About Us
             </Typography>
-            <Typography variant="body2" color="white">
-              Your one-stop shop for all your shopping needs.
-              Quality products, competitive prices, and excellent service.
-            </Typography>
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <Typography variant="h6" color="white" gutterBottom>
+            <StyledSection>
+              <Typography variant="body2">
+                Welcome to our e-commerce platform! We offer a wide range of products at competitive prices.
+              </Typography>
+            </StyledSection>
+          </StyledGrid>
+
+          <StyledGrid item xs={12} sm={4}>
+            <Typography variant="h6" gutterBottom>
               Quick Links
             </Typography>
-            <Link href="/" color="inherit" display="block" sx={{ mb: 1 }}>
-              Home
-            </Link>
-            <Link href="/products" color="inherit" display="block" sx={{ mb: 1 }}>
-              Products
-            </Link>
-            <Link href="/cart" color="inherit" display="block" sx={{ mb: 1 }}>
-              Cart
-            </Link>
-            <Link href="/login" color="inherit" display="block" sx={{ mb: 1 }}>
-              Login
-            </Link>
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <Typography variant="h6" color="white" gutterBottom>
-              Contact Us
+            <StyledSection>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                <Link href="/about">About Us</Link>
+                <Link href="/contact">Contact</Link>
+                <Link href="/terms">Terms & Conditions</Link>
+                <Link href="/privacy">Privacy Policy</Link>
+              </Box>
+            </StyledSection>
+          </StyledGrid>
+
+          <StyledGrid item xs={12} sm={4}>
+            <Typography variant="h6" gutterBottom>
+              Follow Us
             </Typography>
-            <Typography variant="body2" color="white" paragraph>
-              Email: info@shopsmart.com
-            </Typography>
-            <Typography variant="body2" color="white" paragraph>
-              Phone: +1 (123) 456-7890
-            </Typography>
-            <Box>
-              <IconButton color="inherit" aria-label="Facebook">
-                <Facebook />
-              </IconButton>
-              <IconButton color="inherit" aria-label="Twitter">
-                <Twitter />
-              </IconButton>
-              <IconButton color="inherit" aria-label="Instagram">
-                <Instagram />
-              </IconButton>
-              <IconButton color="inherit" aria-label="LinkedIn">
-                <LinkedIn />
-              </IconButton>
-              <IconButton color="inherit" aria-label="GitHub">
-                <GitHub />
-              </IconButton>
-            </Box>
-          </Grid>
+            <StyledSection>
+              <Box sx={{ display: 'flex', gap: 3, mt: 2, justifyContent: 'center' }}>
+                <StyledIcon>
+                  <FacebookIcon />
+                </StyledIcon>
+                <StyledIcon>
+                  <TwitterIcon />
+                </StyledIcon>
+                <StyledIcon>
+                  <InstagramIcon />
+                </StyledIcon>
+                <StyledIcon>
+                  <LinkedInIcon />
+                </StyledIcon>
+                <StyledIcon>
+                  <GitHubIcon />
+                </StyledIcon>
+              </Box>
+            </StyledSection>
+          </StyledGrid>
         </Grid>
-        <Box mt={3}>
-          <Typography variant="body2" color="white" align="center">
-            {'© '}
-            {new Date().getFullYear()}
-            {' ShopSmart. All rights reserved.'}
-          </Typography>
-        </Box>
-      </Container>
-    </Box>
+        <StyledBox>
+          <StyledCopyright>
+            <Typography variant="body2">
+              {' '}
+              {new Date().getFullYear()}
+              {' Your Company Name. All rights reserved.'}
+            </Typography>
+          </StyledCopyright>
+        </StyledBox>
+      </StyledContainer>
+    </StyledFooter>
   );
 };
 

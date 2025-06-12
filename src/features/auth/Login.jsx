@@ -4,20 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from './AuthContext';
 import { Box, Button, Container, TextField, Typography, Alert } from '@mui/material';
 
-// Hardcoded credentials for demo
-const DEMO_CREDENTIALS = {
-  username: 'admin',
-  password: 'password123'
-};
-
 const Login = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm({
-    defaultValues: {
-      username: '',
-      password: ''
-    }
-  });
-  
+  const { register, handleSubmit, formState: { errors } } = useForm();
   const navigate = useNavigate();
   const [error, setError] = React.useState('');
   const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -51,25 +39,25 @@ const Login = () => {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <Box
+    <StyledContainer component="main" maxWidth="xs">
+      <StyledBox
         sx={{
-          marginTop: 8,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
+          gap: 3
         }}
       >
-        <Typography component="h1" variant="h5">
-          Sign in
-        </Typography>
+        <StyledTitle component="h1" variant="h4">
+          Welcome Back
+        </StyledTitle>
         {error && (
-          <Alert severity="error" sx={{ mt: 2 }}>
+          <StyledAlert severity="error">
             {error}
-          </Alert>
+          </StyledAlert>
         )}
-        <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1 }}>
-          <TextField
+        <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ width: '100%', mt: 2 }}>
+          <StyledTextField
             margin="normal"
             fullWidth
             id="username"
@@ -92,7 +80,7 @@ const Login = () => {
             helperText={errors.username?.message}
             disabled={isSubmitting}
           />
-          <TextField
+          <StyledTextField
             margin="normal"
             fullWidth
             name="password"
@@ -115,18 +103,20 @@ const Login = () => {
             helperText={errors.password?.message}
             disabled={isSubmitting}
           />
-          <Button
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2 }}>
+            <StyledLink href="/forgot-password">Forgot Password?</StyledLink>
+          </Box>
+          <StyledButton
             type="submit"
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
-            disabled={isSubmitting}
           >
-            {isSubmitting ? 'Signing in...' : 'Sign In'}
+            Sign In
           </Button>
         </Box>
-      </Box>
-    </Container>
+      </StyledBox>
+    </StyledContainer>
   );
 };
 

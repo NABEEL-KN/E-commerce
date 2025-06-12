@@ -17,13 +17,20 @@ const Layout = () => {
       overflowX: 'hidden',
       position: 'relative'
     }}>
-      <Box sx={{ width: '100%', maxWidth: '100%' }}>
+      <Box sx={{ 
+        width: '100%',
+        maxWidth: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        flex: 1
+      }}>
         <Header />
         <Box sx={{ 
           flexGrow: 1,
           width: '100%',
           maxWidth: '100%',
-          px: 0
+          px: 0,
+          overflow: 'hidden'
         }}>
           <Outlet />
         </Box>
