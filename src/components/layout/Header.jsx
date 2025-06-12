@@ -239,15 +239,15 @@ const Header = () => {
   );
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
+    <Box sx={{ width: '100%', m: 0, p: 0 }}>
+      <AppBar position="static" sx={{ width: '100%', m: 0 }}>
+        <Toolbar sx={{ width: '100%', m: 0, p: 0 }}>
           <IconButton
             size="large"
             edge="start"
             color="inherit"
             aria-label="open drawer"
-            sx={{ mr: 2 }}
+            sx={{ mr: 1 }}
             onClick={handleDrawerToggle}
           >
             <MenuIcon />

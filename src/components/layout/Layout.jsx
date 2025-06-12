@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom';
-import { Box, Container } from '@mui/material';
+import { Box } from '@mui/material';
 import Header from './Header';
 import Footer from './Footer';
 
@@ -9,11 +9,30 @@ import Footer from './Footer';
  */
 const Layout = () => {
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: '100vh',
+        width: '100%',
+        overflowX: 'hidden',
+        m: 0,
+        p: 0
+      }}
+    >
       <Header />
-      <Container component="main" sx={{ flexGrow: 1, py: 4 }}>
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          width: '100%',
+          m: 0,
+          p: 0,
+          overflow: 'hidden'
+        }}
+      >
         <Outlet />
-      </Container>
+      </Box>
       <Footer />
     </Box>
   );

@@ -9,16 +9,18 @@ const Footer = () => {
     <Box
       component="footer"
       sx={{
-        py: 3,
-        px: 2,
+        py: 2,
+        px: 1,
         mt: 'auto',
         backgroundColor: (theme) => theme.palette.grey[900],
         color: 'white',
+        width: '100%',
+        m: 0
       }}
     >
-      <Container maxWidth="lg">
+      <Box sx={{ width: '100%', maxWidth: '1400px', mx: 'auto', px: 1 }}>
         <Grid container spacing={4}>
-          <Grid item xs={12} sm={4}>
+          <Grid xs={12}>
             <Typography variant="h6" color="white" gutterBottom>
               ShopSmart
             </Typography>
@@ -27,7 +29,7 @@ const Footer = () => {
               Quality products, competitive prices, and excellent service.
             </Typography>
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid xs={12}>
             <Typography variant="h6" color="white" gutterBottom>
               Quick Links
             </Typography>
@@ -44,7 +46,7 @@ const Footer = () => {
               Login
             </Link>
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid xs={12}>
             <Typography variant="h6" color="white" gutterBottom>
               Contact Us
             </Typography>
@@ -80,7 +82,7 @@ const Footer = () => {
             {' ShopSmart. All rights reserved.'}
           </Typography>
         </Box>
-      </Container>
+      </Box>
     </Box>
   );
 };

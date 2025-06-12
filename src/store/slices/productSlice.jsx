@@ -2,14 +2,14 @@ import { createSlice } from '@reduxjs/toolkit';
 import { productApi } from '../api/productApi';
 
 const initialState = {
+  currentPage: 1,
+  searchQuery: '',
   filters: {
     category: 'all',
-    priceRange: [0, 1000],
-    rating: 0,
-    searchQuery: '',
+    priceRange: { min: 0, max: 1000 },
+    rating: false
   },
-  sortBy: 'price',
-  sortOrder: 'asc',
+  sortBy: 'price_asc',
   viewMode: 'grid', // 'grid' or 'list'
 };
 
@@ -17,23 +17,17 @@ const productSlice = createSlice({
   name: 'products',
   initialState,
   reducers: {
-    setCategory: (state, action) => {
-      state.filters.category = action.payload;
-    },
-    setPriceRange: (state, action) => {
-      state.filters.priceRange = action.payload;
-    },
-    setRating: (state, action) => {
-      state.filters.rating = action.payload;
+    setFilters: (state, action) => {
+      state.filters = action.payload;
     },
     setSearchQuery: (state, action) => {
-      state.filters.searchQuery = action.payload;
+      state.searchQuery = action.payload;
     },
     setSortBy: (state, action) => {
       state.sortBy = action.payload;
     },
-    setSortOrder: (state, action) => {
-      state.sortOrder = action.payload;
+    setPage: (state, action) => {
+      state.currentPage = action.payload;
     },
     setViewMode: (state, action) => {
       state.viewMode = action.payload;
@@ -41,7 +35,8 @@ const productSlice = createSlice({
     resetFilters: (state) => {
       state.filters = initialState.filters;
       state.sortBy = initialState.sortBy;
-      state.sortOrder = initialState.sortOrder;
+      state.currentPage = 1;
+      state.searchQuery = '';
     },
   },
   extraReducers: (builder) => {
@@ -55,12 +50,10 @@ const productSlice = createSlice({
 });
 
 export const {
-  setCategory,
-  setPriceRange,
-  setRating,
+  setFilters,
   setSearchQuery,
   setSortBy,
-  setSortOrder,
+  setPage,
   setViewMode,
   resetFilters,
 } = productSlice.actions;
