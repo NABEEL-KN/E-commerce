@@ -50,6 +50,15 @@ const Filters = () => {
     dispatch(setFilters(newFilters));
   };
 
+  const handlePriceChange = (event, newValue) => {
+    const newFilters = {
+      ...filters,
+      priceRange: { min: newValue[0], max: newValue[1] },
+      page: 1
+    };
+    dispatch(setFilters(newFilters));
+  };
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
@@ -97,44 +106,22 @@ const Filters = () => {
           </Box>
 
           {/* Price Range */}
-          <Box sx={{ flex: 2, minWidth: 180 }}>
-            <Typography variant="subtitle2" sx={{ mb: 0.5, color: 'text.secondary', fontWeight: 600 }}>
+          <Box sx={{ flex: 2, minWidth: 180, px: 2, pt: 2 }}>
+            <Typography variant="subtitle2" sx={{ mb: 1 }}>
               Price Range
             </Typography>
-            <Slider
-              value={[
-                filters.priceRange.min ?? 0,
-                filters.priceRange.max ?? 1000
-              ]}
-              onChange={(event, newValue) => {
-                const newFilters = {
-                  ...filters,
-                  priceRange: { min: newValue[0], max: newValue[1] },
-                  page: 1
-                };
-                dispatch(setFilters(newFilters));
-              }}
-              min={0}
-              max={1000}
-              step={10}
-              marks={[
-                { value: 0, label: '$0' },
-                { value: 250, label: '$250' },
-                { value: 500, label: '$500' },
-                { value: 750, label: '$750' },
-                { value: 1000, label: '$1000' }
-              ]}
-              valueLabelDisplay="auto"
-              sx={{
-                width: '100%',
-                color: 'primary.main',
-                mb: 0.5,
-                mt: 0.5
-              }}
-            />
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, color: 'grey.600' }}>
-              <span>${filters.priceRange.min ?? 0}</span>
-              <span>${filters.priceRange.max ?? 1000}</span>
+            <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+              <Typography variant="body2" sx={{ minWidth: 36 }}>${filters.priceRange?.min ?? 0}</Typography>
+              <Slider
+                value={[filters.priceRange?.min ?? 0, filters.priceRange?.max ?? 1000]}
+                min={0}
+                max={1000}
+                step={10}
+                onChange={handlePriceChange}
+                valueLabelDisplay="auto"
+                sx={{ mx: 2, flex: 1 }}
+              />
+              <Typography variant="body2" sx={{ minWidth: 44, textAlign: 'right' }}>${filters.priceRange?.max ?? 1000}</Typography>
             </Box>
           </Box>
 
