@@ -28,6 +28,13 @@ const StyledGrid = styled(Grid)(({ theme }) => ({
     fontWeight: 600,
     marginBottom: theme.spacing(2),
   },
+  // Grid v2 responsive props
+  '@media (min-width: 0px)': {
+    gridColumn: 'span 12',
+  },
+  '@media (min-width: 600px)': {
+    gridColumn: 'span 4',
+  },
 }));
 
 const StyledSection = styled(Box)(({ theme }) => ({
@@ -76,7 +83,7 @@ const Footer = () => {
     <StyledFooter>
       <StyledContainer>
         <Grid container spacing={4}>
-          <StyledGrid item xs={12} sm={4}>
+          <StyledGrid>
             <Typography variant="h6" gutterBottom>
               About Us
             </Typography>
@@ -87,7 +94,7 @@ const Footer = () => {
             </StyledSection>
           </StyledGrid>
 
-          <StyledGrid item xs={12} sm={4}>
+          <StyledGrid>
             <Typography variant="h6" gutterBottom>
               Quick Links
             </Typography>
@@ -101,7 +108,7 @@ const Footer = () => {
             </StyledSection>
           </StyledGrid>
 
-          <StyledGrid item xs={12} sm={4}>
+          <StyledGrid>
             <Typography variant="h6" gutterBottom>
               Follow Us
             </Typography>

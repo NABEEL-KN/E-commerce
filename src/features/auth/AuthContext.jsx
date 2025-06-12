@@ -4,11 +4,19 @@ import { useNavigate } from 'react-router-dom';
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
+  const [currentUser, setCurrentUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const [currentUser, setCurrentUser] = useState(() => {
-    const user = localStorage.getItem('currentUser');
-    return user ? JSON.parse(user) : null;
-  });
+
+  // Check if user is logged in on initial load
+  useEffect(() => {
+    const isAuthenticated = localStorage.getItem('isAuthenticated');
+    if (isAuthenticated) {
+      // In a real app, you would fetch user data here
+      setCurrentUser({ username: 'admin' });
+    }
+    setLoading(false);
+  }, []);
 
   // Load users from localStorage
   const loadUsers = () => {
@@ -16,6 +24,7 @@ export const AuthProvider = ({ children }) => {
     return users ? JSON.parse(users) : [];
   };
 
+  // Signup function
   const signup = async (userData) => {
     try {
       const users = loadUsers();
@@ -38,6 +47,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Login function
   const login = async (email, password) => {
     try {
       const users = loadUsers();
@@ -48,6 +58,7 @@ export const AuthProvider = ({ children }) => {
       }
 
       setCurrentUser(user);
+      localStorage.setItem('isAuthenticated', 'true');
       localStorage.setItem('currentUser', JSON.stringify(user));
       return { success: true };
     } catch (error) {
@@ -55,8 +66,10 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Logout function
   const logout = () => {
     setCurrentUser(null);
+    localStorage.removeItem('isAuthenticated');
     localStorage.removeItem('currentUser');
     navigate('/login');
   };
@@ -71,7 +84,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={value}>
-      {children}
+      {!loading && children}
     </AuthContext.Provider>
   );
 };
@@ -83,3 +96,5 @@ export const useAuth = () => {
   }
   return context;
 };
+
+export default AuthContext;

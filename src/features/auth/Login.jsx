@@ -1,86 +1,87 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from './AuthContext';
-import { Box, Button, Container, TextField, Typography, Alert } from '@mui/material';
+import { Box, Button, Container, TextField, Typography, Alert, Divider } from '@mui/material';
+
+// Demo user credentials for testing
+const DEMO_USER = {
+  email: 'admin@example.com',
+  password: 'password123'
+};
 
 const Login = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
   const navigate = useNavigate();
-  const [error, setError] = React.useState('');
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
-
   const { login } = useAuth();
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const onSubmit = async (data) => {
+  const handleLogin = async (email, password) => {
+    setIsLoading(true);
     setError('');
-    setIsSubmitting(true);
-    
     try {
-      // For demo purposes, we'll use hardcoded credentials
-      if (data.username === DEMO_CREDENTIALS.username && data.password === DEMO_CREDENTIALS.password) {
-        // In a real app, you would call login with email/password
-        const result = await login('admin@example.com', 'password123');
-        if (result.success) {
-          // Redirect to dashboard on successful login
-          navigate('/dashboard');
-        } else {
-          setError(result.message || 'Invalid username or password');
-        }
+      const result = await login(email, password);
+      if (result.success) {
+        navigate('/dashboard');
       } else {
-        setError('Invalid username or password');
+        setError(result.message || 'Login failed. Please check your credentials.');
       }
     } catch (err) {
-      setError('An error occurred during login');
       console.error('Login error:', err);
+      setError('An error occurred during login. Please try again.');
     } finally {
-      setIsSubmitting(false);
+      setIsLoading(false);
     }
   };
 
+  const onSubmit = async (data) => {
+    await handleLogin(data.email, data.password);
+  };
+
+  const handleDemoLogin = async (e) => {
+    e.preventDefault();
+    await handleLogin(DEMO_USER.email, DEMO_USER.password);
+  };
+
   return (
-    <StyledContainer component="main" maxWidth="xs">
-      <StyledBox
+    <Container component="main" maxWidth="xs">
+      <Box
         sx={{
+          marginTop: 8,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          gap: 3
         }}
       >
-        <StyledTitle component="h1" variant="h4">
+        <Typography component="h1" variant="h4" sx={{ mb: 3, fontWeight: 'bold' }}>
           Welcome Back
-        </StyledTitle>
+        </Typography>
         {error && (
-          <StyledAlert severity="error">
+          <Alert severity="error" sx={{ mt: 2 }}>
             {error}
-          </StyledAlert>
+          </Alert>
         )}
-        <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ width: '100%', mt: 2 }}>
-          <StyledTextField
+        <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1 }}>
+          <TextField
             margin="normal"
             fullWidth
-            id="username"
-            label="Username"
-            name="username"
-            autoComplete="username"
+            id="email"
+            label="Email Address"
+            name="email"
+            autoComplete="email"
             autoFocus
-            {...register('username', {
-              required: 'Username is required',
-              minLength: {
-                value: 3,
-                message: 'Username must be at least 3 characters'
-              },
-              maxLength: {
-                value: 20,
-                message: 'Username cannot exceed 20 characters'
+            {...register('email', {
+              required: 'Email is required',
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                message: 'Invalid email address'
               }
             })}
-            error={!!errors.username}
-            helperText={errors.username?.message}
-            disabled={isSubmitting}
+            error={!!errors.email}
+            helperText={errors.email?.message}
           />
-          <StyledTextField
+          <TextField
             margin="normal"
             fullWidth
             name="password"
@@ -93,30 +94,57 @@ const Login = () => {
               minLength: {
                 value: 6,
                 message: 'Password must be at least 6 characters'
-              },
-              maxLength: {
-                value: 30,
-                message: 'Password cannot exceed 30 characters'
               }
             })}
             error={!!errors.password}
             helperText={errors.password?.message}
-            disabled={isSubmitting}
           />
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2 }}>
-            <StyledLink href="/forgot-password">Forgot Password?</StyledLink>
-          </Box>
-          <StyledButton
+          <Button
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+            disabled={isSubmitting || isLoading}
+            sx={{
+              mt: 3,
+              mb: 2,
+              py: 1.5,
+              fontSize: '1rem',
+              textTransform: 'none',
+              fontWeight: 600
+            }}
           >
-            Sign In
+            {isLoading ? 'Signing in...' : 'Sign In'}
           </Button>
+
+          <Divider sx={{ my: 3 }}>OR</Divider>
+
+          <Button
+            fullWidth
+            variant="outlined"
+            onClick={handleDemoLogin}
+            disabled={isLoading}
+            sx={{
+              mb: 2,
+              py: 1.5,
+              fontSize: '1rem',
+              textTransform: 'none',
+              fontWeight: 500
+            }}
+          >
+            Try Demo Account
+          </Button>
+
+          <Box sx={{ textAlign: 'center', mt: 2 }}>
+            <Typography variant="body2" color="text.secondary">
+              Don't have an account?{' '}
+              <Link to="/signup" style={{ textDecoration: 'none', color: 'primary.main' }}>
+                Sign up
+              </Link>
+            </Typography>
+          </Box>
         </Box>
-      </StyledBox>
-    </StyledContainer>
+      </Box>
+    </Container>
   );
 };
 
