@@ -4,18 +4,49 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from './AuthContext';
 import { Box, Button, Container, TextField, Typography, Alert } from '@mui/material';
 
+// Hardcoded credentials for demo
+const DEMO_CREDENTIALS = {
+  username: 'admin',
+  password: 'password123'
+};
+
 const Login = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    defaultValues: {
+      username: '',
+      password: ''
+    }
+  });
+  
   const navigate = useNavigate();
-  const { login } = useAuth();
   const [error, setError] = React.useState('');
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+
+  const { login } = useAuth();
 
   const onSubmit = async (data) => {
-    const result = await login(data.email, data.password);
-    if (result.success) {
-      navigate('/');
-    } else {
-      setError(result.message);
+    setError('');
+    setIsSubmitting(true);
+    
+    try {
+      // For demo purposes, we'll use hardcoded credentials
+      if (data.username === DEMO_CREDENTIALS.username && data.password === DEMO_CREDENTIALS.password) {
+        // In a real app, you would call login with email/password
+        const result = await login('admin@example.com', 'password123');
+        if (result.success) {
+          // Redirect to dashboard on successful login
+          navigate('/dashboard');
+        } else {
+          setError(result.message || 'Invalid username or password');
+        }
+      } else {
+        setError('Invalid username or password');
+      }
+    } catch (err) {
+      setError('An error occurred during login');
+      console.error('Login error:', err);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -41,20 +72,25 @@ const Login = () => {
           <TextField
             margin="normal"
             fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
+            id="username"
+            label="Username"
+            name="username"
+            autoComplete="username"
             autoFocus
-            {...register('email', {
-              required: 'Email is required',
-              pattern: {
-                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                message: 'Invalid email address'
+            {...register('username', {
+              required: 'Username is required',
+              minLength: {
+                value: 3,
+                message: 'Username must be at least 3 characters'
+              },
+              maxLength: {
+                value: 20,
+                message: 'Username cannot exceed 20 characters'
               }
             })}
-            error={!!errors.email}
-            helperText={errors.email?.message}
+            error={!!errors.username}
+            helperText={errors.username?.message}
+            disabled={isSubmitting}
           />
           <TextField
             margin="normal"
@@ -69,18 +105,24 @@ const Login = () => {
               minLength: {
                 value: 6,
                 message: 'Password must be at least 6 characters'
+              },
+              maxLength: {
+                value: 30,
+                message: 'Password cannot exceed 30 characters'
               }
             })}
             error={!!errors.password}
             helperText={errors.password?.message}
+            disabled={isSubmitting}
           />
           <Button
             type="submit"
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
+            disabled={isSubmitting}
           >
-            Sign In
+            {isSubmitting ? 'Signing in...' : 'Sign In'}
           </Button>
         </Box>
       </Box>
