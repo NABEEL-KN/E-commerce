@@ -16,7 +16,12 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  TextField,
+  InputAdornment,
+  Button,
+  CircularProgress,
 } from '@mui/material';
+import { Search as SearchIcon } from '@mui/icons-material';
 import { useTheme } from '@mui/material/styles';
 import { GridView, ViewList } from '@mui/icons-material';
 import { useGetProductsQuery, useGetCategoriesQuery } from '../store/api/productApi';
@@ -45,7 +50,7 @@ const ProductsPage = () => {
     error: productsError 
   } = useGetProductsQuery();
 
-  // Get filter state
+  // Get filter state from Redux
   const { 
     searchQuery, 
     selectedCategory, 
@@ -53,6 +58,18 @@ const ProductsPage = () => {
     viewMode,
     sortOption
   } = useSelector((state) => state.filters);
+
+  // Handlers
+  const handleSearch = (e) => {
+    if (e.key === 'Enter') {
+      dispatch(setSearchQuery(e.target.value));
+    }
+  };
+
+  const handleClearFilters = () => {
+    dispatch(setSearchQuery(''));
+    dispatch(setFilters({ category: 'all', priceRange: { min: 0, max: 1000 }, rating: 0 }));
+  };
 
   // Handle view mode change
   const handleViewModeChange = (event, newViewMode) => {
@@ -130,208 +147,6 @@ const ProductsPage = () => {
         </Box>
       </Container>
     </Box>
-  );
-};
-
-export default ProductsPage;
-                    onChange={handleSortChange}
-                  >
-                    <MenuItem value={SORT_OPTIONS.FEATURED}>Featured</MenuItem>
-                    <MenuItem value={SORT_OPTIONS.PRICE_LOW_TO_HIGH}>Price: Low to High</MenuItem>
-                    <MenuItem value={SORT_OPTIONS.PRICE_HIGH_TO_LOW}>Price: High to Low</MenuItem>
-                    <MenuItem value={SORT_OPTIONS.RATING}>Top Rated</MenuItem>
-                  </Select>
-                </FormControl>
-                
-                <TextField
-                  fullWidth
-                  margin="normal"
-                  label="Search Products"
-                  variant="outlined"
-                  defaultValue={storeSearchQuery}
-                  onKeyDown={handleSearch}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <SearchIcon />
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              </Paper>
-            </Grid>
-          )}
-
-          {/* Products Grid */}
-          <Grid item xs={12} md={!isMobile ? 9 : 12}>
-            {/* View Controls */}
-            <Box 
-              sx={{ 
-                display: 'flex', 
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                mb: 2 
-              }}
-            >
-              <Typography variant="body2" color="text.secondary">
-                Showing {paginatedProducts.length} of {filteredProducts.length} products
-              </Typography>
-              
-              <ToggleButtonGroup
-                value={viewMode}
-                exclusive
-                onChange={handleViewModeChange}
-                aria-label="view mode"
-                size="small"
-              >
-                <ToggleButton value={VIEW_MODES.GRID} aria-label="grid view">
-                  <GridViewIcon />
-                </ToggleButton>
-                <ToggleButton value={VIEW_MODES.LIST} aria-label="list view">
-                  <ListViewIcon />
-                </ToggleButton>
-              </ToggleButtonGroup>
-            </Box>
-
-            {/* Products Display */}
-            {filteredProducts.length === 0 ? (
-              <Paper sx={{ p: 4, textAlign: 'center' }}>
-                <Typography variant="h6" gutterBottom>
-                  No products found
-                </Typography>
-                <Typography variant="body1" color="text.secondary">
-                  Try adjusting your search or filter criteria
-                </Typography>
-                <Button 
-                  variant="contained" 
-                  sx={{ mt: 2 }}
-                  onClick={handleClearFilters}
-                >
-                  Clear Filters
-                </Button>
-              </Paper>
-            ) : (
-              <Grid 
-                container 
-                spacing={2} 
-                columns={viewMode === VIEW_MODES.GRID ? { xs: 12, sm: 12, md: 12 } : { xs: 12 }}
-              >
-                {paginatedProducts.map((product) => (
-                  <Grid 
-                    item 
-                    key={product.id} 
-                    xs={12}
-                    sm={viewMode === VIEW_MODES.GRID ? 6 : 12}
-                    md={viewMode === VIEW_MODES.GRID ? 4 : 12}
-                    lg={viewMode === VIEW_MODES.GRID ? 3 : 12}
-                  >
-                    <ProductCard product={product} />
-                  </Grid>
-                ))}
-              </Grid>
-            )}
-
-            {/* Pagination */}
-            {totalPages > 1 && (
-              <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-                <Pagination 
-                  count={totalPages} 
-                  page={page} 
-                  onChange={handlePageChange} 
-                  color="primary" 
-                />
-              </Box>
-            )}
-          </Grid>
-        </Grid>
-
-        {/* Mobile Filter Drawer */}
-        <Drawer
-          anchor="right"
-          open={drawerOpen}
-          onClose={toggleDrawer}
-        >
-          <Box sx={{ width: 280, p: 2 }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-              <Typography variant="h6">Filters</Typography>
-              <IconButton onClick={toggleDrawer}>
-                <CloseIcon />
-              </IconButton>
-            </Box>
-            <Divider sx={{ mb: 2 }} />
-            
-            <FormControl fullWidth margin="normal">
-              <InputLabel id="mobile-category-select-label">Category</InputLabel>
-              <Select
-                labelId="mobile-category-select-label"
-                id="mobile-category-select"
-                value={selectedCategory}
-                label="Category"
-                onChange={handleCategoryChange}
-              >
-                <MenuItem value="">All Categories</MenuItem>
-                {categories.map((category) => (
-                  <MenuItem key={category} value={category}>
-                    {category}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            
-            <FormControl fullWidth margin="normal">
-              <InputLabel id="mobile-sort-select-label">Sort By</InputLabel>
-              <Select
-                labelId="mobile-sort-select-label"
-                id="mobile-sort-select"
-                value={sortOption}
-                label="Sort By"
-                onChange={handleSortChange}
-              >
-                <MenuItem value={SORT_OPTIONS.FEATURED}>Featured</MenuItem>
-                <MenuItem value={SORT_OPTIONS.PRICE_LOW_TO_HIGH}>Price: Low to High</MenuItem>
-                <MenuItem value={SORT_OPTIONS.PRICE_HIGH_TO_LOW}>Price: High to Low</MenuItem>
-                <MenuItem value={SORT_OPTIONS.RATING}>Top Rated</MenuItem>
-              </Select>
-            </FormControl>
-            
-            <TextField
-              fullWidth
-              margin="normal"
-              label="Search Products"
-              variant="outlined"
-              defaultValue={storeSearchQuery}
-              onKeyDown={handleSearch}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon />
-                  </InputAdornment>
-                ),
-              }}
-            />
-            
-            <Button 
-              fullWidth 
-              variant="contained" 
-              color="primary" 
-              onClick={toggleDrawer}
-              sx={{ mt: 2 }}
-            >
-              Apply Filters
-            </Button>
-            
-            <Button 
-              fullWidth 
-              variant="outlined" 
-              onClick={handleClearFilters}
-              sx={{ mt: 1 }}
-            >
-              Clear All
-            </Button>
-          </Box>
-        </Drawer>
-      </Container>
-    </ErrorBoundary>
   );
 };
 
