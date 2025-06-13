@@ -5,7 +5,6 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  Slider,
   Switch,
   FormControlLabel,
   Typography,
@@ -18,11 +17,6 @@ import { setFilters } from '../../store/slices/productSlice';
 const Filters = () => {
   const dispatch = useDispatch();
   const { filters } = useSelector((state) => state.products);
-
-  // Initialize price range if not set
-  if (!filters.priceRange) {
-    dispatch(setFilters({ priceRange: { min: 0, max: 1000 } }));
-  }
 
   const categoryOptions = [
     { value: 'all', label: 'All Categories' },
@@ -45,15 +39,6 @@ const Filters = () => {
     const newFilters = {
       ...filters,
       rating: event.target.checked,
-      page: 1
-    };
-    dispatch(setFilters(newFilters));
-  };
-
-  const handlePriceChange = (event, newValue) => {
-    const newFilters = {
-      ...filters,
-      priceRange: { min: newValue[0], max: newValue[1] },
       page: 1
     };
     dispatch(setFilters(newFilters));
@@ -105,42 +90,32 @@ const Filters = () => {
             </FormControl>
           </Box>
 
-          {/* Price Range */}
-          <Box sx={{ flex: 2, minWidth: 180, px: 2, pt: 2 }}>
-            <Typography variant="subtitle2" sx={{ mb: 1 }}>
-              Price Range
-            </Typography>
-            <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-              <Typography variant="body2" sx={{ minWidth: 36 }}>${filters.priceRange?.min ?? 0}</Typography>
-              <Slider
-                value={[filters.priceRange?.min ?? 0, filters.priceRange?.max ?? 1000]}
-                min={0}
-                max={1000}
-                step={10}
-                onChange={handlePriceChange}
-                valueLabelDisplay="auto"
-                sx={{ mx: 2, flex: 1 }}
-              />
-              <Typography variant="body2" sx={{ minWidth: 44, textAlign: 'right' }}>${filters.priceRange?.max ?? 1000}</Typography>
-            </Box>
-          </Box>
-
-          {/* Rating */}
-          <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: { xs: 'flex-start', md: 'center' } }}>
+          {/* Rating Filter */}
+          <Box sx={{ flex: 1 }}>
             <FormControlLabel
               control={
                 <Switch
                   checked={filters.rating}
                   onChange={handleRatingChange}
-                  color="primary"
+                  size="small"
+                  sx={{
+                    '& .MuiSwitch-switchBase': {
+                      color: 'primary.main',
+                      '&.Mui-checked': {
+                        color: 'primary.main',
+                      },
+                    },
+                    '& .MuiSwitch-track': {
+                      backgroundColor: 'rgba(33,150,243,0.15)',
+                    },
+                  }}
                 />
               }
               label={
-                <Typography sx={{ fontWeight: 500, color: 'text.secondary' }}>
-                  Show only rated products
+                <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
+                  4+ Rating
                 </Typography>
               }
-              sx={{ ml: 0 }}
             />
           </Box>
         </Box>
