@@ -1,8 +1,9 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Layout from './components/layout/Layout';
+import UserProfile from './components/user/UserProfile';
 import { AuthProvider } from './features/auth/AuthContext';
-import Login from './features/auth/Login';
-import Signup from './features/auth/Signup';
+import LoginForm from './components/user/LoginForm';
+import RegisterForm from './components/user/RegisterForm';
 import AuthRoutes from './features/auth/AuthRoutes';
 
 // Placeholder pages - to be implemented by trainees
@@ -19,6 +20,11 @@ function App() {
   return (
     <AuthProvider>
       <Routes>
+        {/* Public routes */}
+        <Route path="/login" element={<LoginForm />} />
+        <Route path="/signup" element={<RegisterForm />} />
+        
+        {/* Protected routes */}
         <Route path="/" element={<Layout />}>
           <Route index element={
             <AuthRoutes>
@@ -45,11 +51,9 @@ function App() {
               <CheckoutPage />
             </AuthRoutes>
           } />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
           <Route path="profile" element={
             <AuthRoutes>
-              <ProfilePage />
+              <UserProfile />
             </AuthRoutes>
           } />
           <Route path="orders" element={
