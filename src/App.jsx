@@ -1,5 +1,4 @@
-import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Layout from './components/layout/Layout';
 import { AuthProvider } from './features/auth/AuthContext';
 import Login from './features/auth/Login';
@@ -13,9 +12,10 @@ const ProtectedRoute = () => {
   return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
 };
 
-// Placeholder pages - to be implemented by trainees
+// Pages
+import ProductListing from './features/product-listing/ProductListing';
 const HomePage = () => <div>Home Page (to be implemented)</div>;
-const ProductsPage = () => <div>Products Page (to be implemented)</div>;
+const ProductsPage = () => <ProductListing />;
 const ProductDetailPage = () => <div>Product Detail Page (to be implemented)</div>;
 const CartPage = () => <div>Cart Page (to be implemented)</div>;
 const CheckoutPage = () => <div>Checkout Page (to be implemented)</div>;
@@ -25,44 +25,23 @@ const NotFoundPage = () => <div>404 - Page Not Found</div>;
 
 function App() {
   return (
-    <AuthProvider>
+    <BrowserRouter>
       <Routes>
-        {/* Public routes with layout */}
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
           <Route path="products" element={<ProductsPage />} />
           <Route path="products/:id" element={<ProductDetailPage />} />
           <Route path="cart" element={<CartPage />} />
           <Route path="checkout" element={<CheckoutPage />} />
+          <Route path="login" element={<LoginPage />} />
+          <Route path="register" element={<RegisterPage />} />
           <Route path="profile" element={<ProfilePage />} />
           <Route path="orders" element={<OrderHistoryPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
-        
-        {/* Auth routes */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        
-        {/* Protected routes */}
-        <Route element={
-          <AuthRoutes>
-            <ProtectedRoute />
-          </AuthRoutes>
-        }>
-          <Route path="/dashboard" element={<Dashboard />}>
-            <Route index element={<Navigate to="/dashboard/home" replace />} />
-          </Route>
-        </Route>
-        
-        {/* Catch all other routes */}
-        <Route path="*" element={
-          <Layout>
-            <NotFoundPage />
-          </Layout>
-        } />
       </Routes>
-    </AuthProvider>
-    );
+    </BrowserRouter>
+  );
 }
 
 export default App;

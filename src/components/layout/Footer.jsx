@@ -80,37 +80,49 @@ const StyledCopyright = styled(Box)(({ theme }) => ({
 
 const Footer = () => {
   return (
-    <StyledFooter>
-      <StyledContainer>
+    <Box
+      component="footer"
+      sx={{
+        py: 2,
+        px: 1,
+        mt: 'auto',
+        backgroundColor: (theme) => theme.palette.grey[900],
+        color: 'white',
+        width: '100%',
+        m: 0
+      }}
+    >
+      <Box sx={{ width: '100%', maxWidth: '1400px', mx: 'auto', px: 1 }}>
         <Grid container spacing={4}>
-          <StyledGrid>
-            <Typography variant="h6" gutterBottom>
-              About Us
+          <Grid xs={12}>
+            <Typography variant="h6" color="white" gutterBottom>
+              ShopSmart
             </Typography>
-            <StyledSection>
-              <Typography variant="body2">
-                Welcome to our e-commerce platform! We offer a wide range of products at competitive prices.
-              </Typography>
-            </StyledSection>
-          </StyledGrid>
-
-          <StyledGrid>
-            <Typography variant="h6" gutterBottom>
+            <Typography variant="body2" color="white">
+              Your one-stop shop for all your shopping needs.
+              Quality products, competitive prices, and excellent service.
+            </Typography>
+          </Grid>
+          <Grid xs={12}>
+            <Typography variant="h6" color="white" gutterBottom>
               Quick Links
             </Typography>
-            <StyledSection>
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                <Link href="/about">About Us</Link>
-                <Link href="/contact">Contact</Link>
-                <Link href="/terms">Terms & Conditions</Link>
-                <Link href="/privacy">Privacy Policy</Link>
-              </Box>
-            </StyledSection>
-          </StyledGrid>
-
-          <StyledGrid>
-            <Typography variant="h6" gutterBottom>
-              Follow Us
+            <Link href="/" color="inherit" display="block" sx={{ mb: 1 }}>
+              Home
+            </Link>
+            <Link href="/products" color="inherit" display="block" sx={{ mb: 1 }}>
+              Products
+            </Link>
+            <Link href="/cart" color="inherit" display="block" sx={{ mb: 1 }}>
+              Cart
+            </Link>
+            <Link href="/login" color="inherit" display="block" sx={{ mb: 1 }}>
+              Login
+            </Link>
+          </Grid>
+          <Grid xs={12}>
+            <Typography variant="h6" color="white" gutterBottom>
+              Contact Us
             </Typography>
             <StyledSection>
               <Box sx={{ display: 'flex', gap: 3, mt: 2, justifyContent: 'center' }}>
@@ -133,17 +145,15 @@ const Footer = () => {
             </StyledSection>
           </StyledGrid>
         </Grid>
-        <StyledBox>
-          <StyledCopyright>
-            <Typography variant="body2">
-              {' '}
-              {new Date().getFullYear()}
-              {' Your Company Name. All rights reserved.'}
-            </Typography>
-          </StyledCopyright>
-        </StyledBox>
-      </StyledContainer>
-    </StyledFooter>
+        <Box mt={3}>
+          <Typography variant="body2" color="white" align="center">
+            {'© '}
+            {new Date().getFullYear()}
+            {' ShopSmart. All rights reserved.'}
+          </Typography>
+        </Box>
+      </Box>
+    </Box>
   );
 };
 

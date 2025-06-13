@@ -9,33 +9,31 @@ import Footer from './Footer';
  */
 const Layout = () => {
   return (
-    <Box sx={{ 
-      display: 'flex', 
-      flexDirection: 'column', 
-      minHeight: '100vh',
-      width: '100vw',
-      overflowX: 'hidden',
-      position: 'relative'
-    }}>
-      <Box sx={{ 
-        width: '100%',
-        maxWidth: '100%',
+    <Box
+      sx={{
         display: 'flex',
         flexDirection: 'column',
-        flex: 1
-      }}>
-        <Header />
-        <Box sx={{ 
+        minHeight: '100vh',
+        width: '100%',
+        overflowX: 'hidden',
+        m: 0,
+        p: 0
+      }}
+    >
+      <Header />
+      <Box
+        component="main"
+        sx={{
           flexGrow: 1,
           width: '100%',
-          maxWidth: '100%',
-          px: 0,
+          m: 0,
+          p: 0,
           overflow: 'hidden'
-        }}>
-          <Outlet />
-        </Box>
-        <Footer />
+        }}
+      >
+        <Outlet />
       </Box>
+      <Footer />
     </Box>
   );
 };
