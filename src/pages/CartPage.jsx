@@ -35,7 +35,7 @@ const CartPage = () => {
   const [isApplyingPromo, setIsApplyingPromo] = useState(false);
   
   // Get cart data from Redux store via custom hook
-  const { items, totalItems, subtotal, isLoading, clearCart } = useCart();
+  const { items, totalItems, subtotal, isLoading, emptyCart: clearCart } = useCart();
   
   // Constants for cart calculations
   const TAX_RATE = 0.07; // 7% tax

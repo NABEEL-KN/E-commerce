@@ -1,48 +1,39 @@
 import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { ThemeProvider, CssBaseline } from '@mui/material';
+import { theme } from './theme';
+import { store } from './store/store';
 import Layout from './components/layout/Layout';
 
 // Pages
-import ProductListing from './features/product-listing/ProductListing';
+import HomePage from './pages/HomePage';
+import ProductsPage from './pages/ProductsPage';
+import ProductDetailPage from './pages/ProductDetailPage';
+import CartPage from './pages/CartPage';
+import LoginPage from './pages/LoginPage';
 
-// Pages
-const HomePage = () => <div>Home Page (to be implemented)</div>;
-const ProductsPage = () => <ProductListing />;
-const ProductDetailPage = () => <div>Product Detail Page (to be implemented)</div>;
-const CartPage = () => <div>Cart Page (to be implemented)</div>;
+// Pages to be implemented
 const CheckoutPage = () => <div>Checkout Page (to be implemented)</div>;
 const OrderHistoryPage = () => <div>Order History Page (to be implemented)</div>;
 const NotFoundPage = () => <div>404 - Page Not Found</div>;
-
-// Wrapper component for protected routes
-const ProtectedLayout = () => (
-  <AuthRoutes>
-    <Layout>
-      <Outlet />
-    </Layout>
-  </AuthRoutes>
-);
 
 function App() {
   return (
     <Provider store={store}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Layout />}>
-              <Route index element={<HomePage />} />
-              <Route path="products" element={<ProductsPage />} />
-              <Route path="products/:id" element={<ProductDetailPage />} />
-              <Route path="cart" element={<CartPage />} />
-              <Route path="checkout" element={<CheckoutPage />} />
-              <Route path="login" element={<LoginPage />} />
-              <Route path="register" element={<RegisterPage />} />
-              <Route path="profile" element={<ProfilePage />} />
-              <Route path="orders" element={<OrderHistoryPage />} />
-              <Route path="*" element={<NotFoundPage />} />
-            </Route>
-          </Routes>
-        </BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<HomePage />} />
+            <Route path="products" element={<ProductsPage />} />
+            <Route path="products/:id" element={<ProductDetailPage />} />
+            <Route path="cart" element={<CartPage />} />
+            <Route path="checkout" element={<CheckoutPage />} />
+            <Route path="login" element={<LoginPage />} />
+            <Route path="orders" element={<OrderHistoryPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Route>
+        </Routes>
       </ThemeProvider>
     </Provider>
   );

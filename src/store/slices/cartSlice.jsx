@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { userApi } from '../api/userApi';
 
-const initialState = {
+export const initialState = {
   items: [],
   status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
   error: null,

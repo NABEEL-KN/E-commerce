@@ -5,18 +5,33 @@ export const productApi = apiSlice.injectEndpoints({
   baseQuery: apiSlice.baseQuery,
   endpoints: (builder) => ({
     getProducts: builder.query({
-      query: ({ limit = 24, category = 'all', searchQuery = '', sortBy = 'price_asc' }) => ({
-        url: '/products',
-        params: {
+      query: (args = {}) => {
+        const { 
+          limit = 24, 
+          category = 'all', 
+          searchQuery = '', 
+          sortBy = 'price_asc' 
+        } = args;
+        
+        const params = {
           limit,
-          ...(category !== 'all' && { category }),
-          ...(searchQuery && { title: searchQuery }),
-          ...(sortBy && {
-            sort: sortBy.split('_')[0],
-            order: sortBy.split('_')[1]
-          })
+          ...(category && category !== 'all' && { category }),
+          ...(searchQuery && { title: searchQuery })
+        };
+        
+        if (sortBy) {
+          const [sort, order] = sortBy.split('_');
+          if (sort && order) {
+            params.sort = sort;
+            params.order = order;
+          }
         }
-      }),
+        
+        return {
+          url: '/products',
+          params
+        };
+      },
       transformResponse: (response) => response,
       providesTags: ['Products']
     }),
