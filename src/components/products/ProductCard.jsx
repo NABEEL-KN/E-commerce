@@ -23,18 +23,19 @@ import useCart from '../../hooks/useCart';
  * @param {Object} props.product - Product data
  * @param {boolean} props.loading - Loading state
  */
-const ProductCard = ({ product, loading = false }) => {
+const ProductCard = ({ product, loading = false, viewMode = 'grid' }) => {
   const navigate = useNavigate();
   const { addItem, isInCart } = useCart();
   const [isFavorite, setIsFavorite] = useState(false);
-  
+  const isListView = viewMode === 'list';
+
   // Handle click on the product card
   const handleClick = () => {
     if (!loading && product) {
       navigate(`/products/${product.id}`);
     }
   };
-  
+
   // Handle add to cart
   const handleAddToCart = (e) => {
     e.stopPropagation(); // Prevent card click
@@ -42,7 +43,7 @@ const ProductCard = ({ product, loading = false }) => {
       addItem(product);
     }
   };
-  
+
   // Handle favorite toggle
   const handleToggleFavorite = (e) => {
     e.stopPropagation(); // Prevent card click
@@ -50,93 +51,157 @@ const ProductCard = ({ product, loading = false }) => {
       setIsFavorite(!isFavorite);
     }
   };
-  
+
   // If loading, show skeleton
   if (loading) {
     return (
       <Card sx={{ maxWidth: 345, height: '100%', display: 'flex', flexDirection: 'column' }}>
-        <Skeleton variant="rectangular" height={200} />
-        <CardContent>
-          <Skeleton variant="text" height={28} width="80%" />
-          <Skeleton variant="text" height={24} width="40%" />
-          <Box sx={{ mt: 1, mb: 1 }}>
-            <Skeleton variant="text" height={24} width="60%" />
-          </Box>
-        </CardContent>
-        <CardActions sx={{ mt: 'auto' }}>
-          <Skeleton variant="rectangular" height={36} width={120} />
-          <Box sx={{ flexGrow: 1 }} />
-          <Skeleton variant="circular" width={40} height={40} />
-        </CardActions>
+        <Card
+          sx={{
+            height: '100%',
+            display: 'flex',
+            flexDirection: isListView ? 'column' : 'column',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+        >
+          <Skeleton variant="rectangular" animation="wave" height={isListView ? 200 : 250} />
+          <CardContent sx={{ flexGrow: 1, p: isListView ? 2 : 1.5 }}>
+            <Typography variant="h6" gutterBottom>
+              <Skeleton animation="wave" width="60%" />
+            </Typography>
+            {isListView && (
+              <Typography variant="body2">
+                <Skeleton animation="wave" width="80%" />
+              </Typography>
+            )}
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: isListView ? 1.5 : 1 }}>
+              <Skeleton animation="wave" width="20px" height="20px" />
+              <Skeleton animation="wave" width="40px" height="20px" sx={{ ml: 0.5 }} />
+            </Box>
+            <Typography variant="h6" color="primary">
+              <Skeleton animation="wave" width="40%" />
+            </Typography>
+          </CardContent>
+          <CardActions
+            sx={{
+              justifyContent: 'space-between',
+              p: isListView ? 2 : 1.5,
+              display: isListView ? 'flex' : 'block',
+            }}
+          >
+            <Skeleton animation="wave" width="40px" height="40px" sx={{ ml: isListView ? 0 : 1 }} />
+            <Skeleton
+              animation="wave"
+              width="40%"
+              height="40px"
+              sx={{
+                mt: isListView ? 0 : 1,
+                ml: isListView ? 1 : 0,
+              }}
+            />
+          </CardActions>
+        </Card>
       </Card>
     );
   }
-  
+
   // If no product data, return null
   if (!product) return null;
-  
+
   return (
-    <Card 
-      sx={{ 
-        maxWidth: 345, 
-        height: '100%', 
-        display: 'flex', 
-        flexDirection: 'column',
-        cursor: 'pointer',
+    <Card
+      sx={{
+        height: '100%',
+        display: 'flex',
+        flexDirection: isListView ? 'column' : 'column',
+        alignItems: 'center',
+        justifyContent: 'space-between',
       }}
       onClick={handleClick}
     >
-      <Box sx={{ position: 'relative' }}>
-        <CardMedia
-          component="img"
-          height="200"
-          image={product.image}
-          alt={product.title}
-          sx={{ objectFit: 'contain', p: 2, backgroundColor: '#f5f5f5' }}
-        />
-        <IconButton
-          sx={{ position: 'absolute', top: 8, right: 8, backgroundColor: 'rgba(255,255,255,0.7)' }}
-          onClick={handleToggleFavorite}
+      <CardMedia
+        component="img"
+        height={isListView ? 200 : 250}
+        width={isListView ? '100%' : 'auto'}
+        image={product?.image || '/placeholder.jpg'}
+        alt={product?.title || 'Product'}
+      />
+      <CardContent sx={{ flexGrow: 1, p: isListView ? 2 : 1.5 }}>
+        <Typography
+          gutterBottom
+          variant="h6"
+          component="div"
+          sx={{
+            fontWeight: 600,
+            mb: isListView ? 1 : 0.5,
+          }}
         >
-          {isFavorite ? <Favorite color="error" /> : <FavoriteBorder />}
-        </IconButton>
-        {product.category && (
-          <Chip
-            label={product.category}
-            size="small"
-            sx={{ position: 'absolute', bottom: 8, left: 8 }}
-          />
+          {product?.title || 'Loading...'}
+        </Typography>
+        {isListView && (
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{
+              mb: 1,
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+            }}
+          >
+            {product?.description || 'Loading...'}
+          </Typography>
         )}
-      </Box>
-      <CardContent sx={{ flexGrow: 1 }}>
-        <Typography gutterBottom variant="h6" component="div" sx={{ height: 60, overflow: 'hidden' }}>
-          {truncateText(product.title, 50)}
-        </Typography>
-        <Typography variant="h6" color="primary" gutterBottom>
-          {formatPrice(product.price)}
-        </Typography>
-        <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: isListView ? 1.5 : 1 }}>
           <Rating
-            name={`rating-${product.id}`}
-            value={product.rating?.rate || 0}
-            precision={0.5}
+            value={product?.rating?.rate || 0}
             readOnly
-            size="small"
+            precision={0.5}
+            sx={{ mr: 0.5 }}
           />
-          <Typography variant="body2" color="text.secondary" sx={{ ml: 1 }}>
-            ({product.rating?.count || 0})
+          <Typography variant="body2" color="text.secondary">
+            ({product?.rating?.count || 0})
           </Typography>
         </Box>
+        <Typography
+          variant="h6"
+          color="primary"
+          sx={{
+            mb: isListView ? 1 : 0.5,
+            fontWeight: 600,
+          }}
+        >
+          {formatPrice(product?.price || 0)}
+        </Typography>
       </CardContent>
-      <CardActions>
-        <Button 
-          variant="contained" 
+      <CardActions
+        sx={{
+          justifyContent: 'space-between',
+          p: isListView ? 2 : 1.5,
+          display: isListView ? 'flex' : 'block',
+        }}
+      >
+        <IconButton
+          onClick={handleToggleFavorite}
+          color="primary"
+          sx={{ ml: isListView ? 0 : 1 }}
+        >
+          {isFavorite ? <Favorite /> : <FavoriteBorder />}
+        </IconButton>
+        <Button
+          variant="contained"
+          color="primary"
           startIcon={<AddShoppingCart />}
           onClick={handleAddToCart}
-          disabled={isInCart(product.id)}
-          color={isInCart(product.id) ? "success" : "primary"}
+          fullWidth={!isListView}
+          sx={{
+            mt: isListView ? 0 : 1,
+            ml: isListView ? 1 : 0,
+          }}
         >
-          {isInCart(product.id) ? 'In Cart' : 'Add to Cart'}
+          Add to Cart
         </Button>
       </CardActions>
     </Card>

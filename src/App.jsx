@@ -1,11 +1,7 @@
 import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import Layout from './components/layout/Layout';
-import UserProfile from './components/user/UserProfile';
-import { AuthProvider } from './features/auth/AuthContext';
-import LoginForm from './components/user/LoginForm';
-import RegisterForm from './components/user/RegisterForm';
-import AuthRoutes from './features/auth/AuthRoutes';
-import Dashboard from './pages/Dashboard';
+
+// Pages
 import ProductListing from './features/product-listing/ProductListing';
 
 // Pages
@@ -28,27 +24,27 @@ const ProtectedLayout = () => (
 
 function App() {
   return (
-    <AuthProvider>
-      <Routes>
-        {/* Public routes */}
-        <Route path="/login" element={<LoginForm />} />
-        <Route path="/signup" element={<RegisterForm />} />
-        
-        {/* Protected routes */}
-        <Route element={<ProtectedLayout />}>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/products" element={<ProductsPage />} />
-          <Route path="/products/:id" element={<ProductDetailPage />} />
-          <Route path="/cart" element={<CartPage />} />
-          <Route path="/checkout" element={<CheckoutPage />} />
-          <Route path="/profile" element={<UserProfile />} />
-          <Route path="/orders" element={<OrderHistoryPage />} />
-        </Route>
-        
-        {/* 404 - Must be last */}
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
-    </AuthProvider>
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Layout />}>
+              <Route index element={<HomePage />} />
+              <Route path="products" element={<ProductsPage />} />
+              <Route path="products/:id" element={<ProductDetailPage />} />
+              <Route path="cart" element={<CartPage />} />
+              <Route path="checkout" element={<CheckoutPage />} />
+              <Route path="login" element={<LoginPage />} />
+              <Route path="register" element={<RegisterPage />} />
+              <Route path="profile" element={<ProfilePage />} />
+              <Route path="orders" element={<OrderHistoryPage />} />
+              <Route path="*" element={<NotFoundPage />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </ThemeProvider>
+    </Provider>
   );
 }
 

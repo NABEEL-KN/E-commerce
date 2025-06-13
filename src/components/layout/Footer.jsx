@@ -12,20 +12,38 @@ const Footer = () => {
     <Box
       component="footer"
       sx={{
+<<<<<<< HEAD
         py: 3,
+=======
+        py: 4,
+>>>>>>> eee2308f6c44dd845dfb4433fd92185e0d4a4660
         px: 2,
         mt: 'auto',
         backgroundColor: theme.palette.grey[900],
         color: 'white',
+<<<<<<< HEAD
       }}
     >
       <Container maxWidth="lg">
         <Grid container spacing={5}>
+=======
+        width: '100%',
+        borderTop: '1px solid',
+        borderColor: 'grey.800'
+      }}
+    >
+      <Container maxWidth="lg">
+        <Grid container spacing={4}>
+>>>>>>> eee2308f6c44dd845dfb4433fd92185e0d4a4660
           <Grid item xs={12} sm={4}>
             <Typography variant="h6" gutterBottom>
               ShopSmart
             </Typography>
+<<<<<<< HEAD
             <Typography variant="body2">
+=======
+            <Typography variant="body2" color="grey.400">
+>>>>>>> eee2308f6c44dd845dfb4433fd92185e0d4a4660
               Your one-stop shop for all your shopping needs. Quality products, competitive prices, and excellent service.
             </Typography>
           </Grid>
@@ -33,6 +51,7 @@ const Footer = () => {
             <Typography variant="h6" gutterBottom>
               Quick Links
             </Typography>
+<<<<<<< HEAD
             <Link href="/" color="inherit" sx={{ textDecoration: 'none', display: 'block', mb: 1, '&:hover': { textDecoration: 'underline' } }}>
               Home
             </Link>
@@ -74,6 +93,35 @@ const Footer = () => {
             {'© '}
             {new Date().getFullYear()}
             {' ShopSmart. All rights reserved.'}
+=======
+            <Link href="/" color="inherit" display="block" sx={{ mb: 1 }}>Home</Link>
+            <Link href="/products" color="inherit" display="block" sx={{ mb: 1 }}>Products</Link>
+            <Link href="/cart" color="inherit" display="block" sx={{ mb: 1 }}>Cart</Link>
+            <Link href="/login" color="inherit" display="block" sx={{ mb: 1 }}>Login</Link>
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <Typography variant="h6" gutterBottom>
+              Contact Us
+            </Typography>
+            <Typography variant="body2" color="grey.400" paragraph>
+              Email: info@shopsmart.com
+            </Typography>
+            <Typography variant="body2" color="grey.400" paragraph>
+              Phone: +1 (123) 456-7890
+            </Typography>
+            <Box>
+              <IconButton color="inherit" aria-label="Facebook"><Facebook /></IconButton>
+              <IconButton color="inherit" aria-label="Twitter"><Twitter /></IconButton>
+              <IconButton color="inherit" aria-label="Instagram"><Instagram /></IconButton>
+              <IconButton color="inherit" aria-label="LinkedIn"><LinkedIn /></IconButton>
+              <IconButton color="inherit" aria-label="GitHub"><GitHub /></IconButton>
+            </Box>
+          </Grid>
+        </Grid>
+        <Box mt={4} pt={2} borderTop="1px solid" borderColor="grey.800">
+          <Typography variant="body2" color="grey.400" align="center">
+            © {new Date().getFullYear()} ShopSmart. All rights reserved.
+>>>>>>> eee2308f6c44dd845dfb4433fd92185e0d4a4660
           </Typography>
         </Box>
       </Container>
