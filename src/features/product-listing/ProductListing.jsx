@@ -44,16 +44,49 @@ const ProductListing = () => {
   } = useSelector((state) => state.products);
   const { data: allProducts = [], isLoading, error } = useGetProductsQuery({
     limit: 24,
-    category: filters.category === 'all' ? undefined : filters.category,
     sortBy: sortBy || undefined
   });
 
-  // Case-insensitive search
-  const products = searchQuery 
-    ? allProducts.filter(product => 
-        product.title.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    : allProducts;
+  // Apply all filters
+  const filteredProducts = allProducts.filter(product => {
+    // Category filter
+    const matchesCategory = filters.category === 'all' || product.category.toLowerCase() === filters.category.toLowerCase();
+    
+    // Search filter
+    const matchesSearch = !searchQuery || product.title.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    // Price range filter
+    const matchesPrice = product.price >= filters.priceRange.min && product.price <= filters.priceRange.max;
+    
+    // Rating filter
+    const matchesRating = !filters.rating || product.rating.rate >= 4;
+    
+    return matchesCategory && matchesSearch && matchesPrice && matchesRating;
+  });
+
+  // Apply sorting
+  const products = [...filteredProducts].sort((a, b) => {
+    const [field, order] = sortBy.split('_');
+    
+    // Handle special cases
+    if (field === 'popularity') {
+      return order === 'asc' 
+        ? a.rating.count - b.rating.count 
+        : b.rating.count - a.rating.count;
+    }
+    
+    if (field === 'latest') {
+      // Assuming products have a date field, you might need to adjust this
+      return order === 'asc' 
+        ? new Date(a.date) - new Date(b.date) 
+        : new Date(b.date) - new Date(a.date);
+    }
+    
+    // Default sorting (price)
+    return order === 'asc' 
+      ? a.price - b.price 
+      : b.price - a.price;
+  });
 
   // Debounced search to prevent excessive API calls
   const debouncedSearch = React.useCallback(

@@ -26,10 +26,10 @@ const Filters = () => {
 
   const categoryOptions = [
     { value: 'all', label: 'All Categories' },
-    { value: 'men clothing', label: 'Men Clothing' },
-    { value: 'women clothing', label: 'Women Clothing' },
-    { value: 'jewelery', label: 'Jewelry' },
-    { value: 'electronics', label: 'Electronics' }
+    { value: "Men's Clothing", label: "Men's Clothing" },
+    { value: "Women's Clothing", label: "Women's Clothing" },
+    { value: 'Jewelery', label: 'Jewelry' },
+    { value: 'Electronics', label: 'Electronics' }
   ];
 
   const handleCategoryChange = (event) => {
