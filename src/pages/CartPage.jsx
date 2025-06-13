@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import {
   Box,
   Container,
@@ -29,6 +31,9 @@ import LoadingSpinner from '../components/common/LoadingSpinner';
  */
 const CartPage = () => {
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
   const [promoCode, setPromoCode] = useState('');
   const [promoError, setPromoError] = useState('');
   const [promoSuccess, setPromoSuccess] = useState('');
@@ -71,6 +76,7 @@ const CartPage = () => {
   
   // Handle checkout
   const handleCheckout = () => {
+    if (totalItems === 0) return;
     navigate('/checkout');
   };
   
@@ -237,12 +243,27 @@ const CartPage = () => {
             <Button
               variant="contained"
               color="primary"
-              fullWidth
-              size="large"
               onClick={handleCheckout}
-              sx={{ mt: 3 }}
+              disabled={totalItems === 0}
+              sx={{ 
+                mt: 3,
+                py: 1.5,
+                px: 4,
+                fontSize: '1.1rem',
+                textTransform: 'none',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+                '&:hover': {
+                  boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
+                  transform: 'translateY(-1px)',
+                },
+                '&:active': {
+                  transform: 'translateY(0)',
+                },
+                transition: 'all 0.2s ease-in-out',
+              }}
+              fullWidth={isMobile}
             >
-              Proceed to Checkout
+              {totalItems > 0 ? `Proceed to Checkout (${formatPrice(total)})` : 'Your Cart is Empty'}
             </Button>
             
             {/* Shipping Policy */}
