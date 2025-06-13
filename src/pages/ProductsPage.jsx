@@ -41,7 +41,7 @@ const ProductsPage = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   // Get categories
-  const { data: categories = [], isLoading: isCategoriesLoading } = useGetCategoriesQuery();
+  const { data: categories = [] } = useGetCategoriesQuery();
 
   // Get products
   const { 
@@ -90,7 +90,7 @@ const ProductsPage = () => {
         {/* Breadcrumbs */}
         <Breadcrumbs sx={{ mb: 2 }}>
           <Link 
-            underline="hover" 
+            underline="hover"  
             color="inherit" 
             component="a" 
             href="/"
@@ -102,7 +102,7 @@ const ProductsPage = () => {
 
         {/* Filter Sidebar and Products Grid */}
         <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap' }}>
-          <Box sx={{ flex: '0 1 300px', order: 2, mb: 3 }}>
+          <Box sx={{ flex: '0 1 100px', order: 2, mb: 3 }}>
             <Paper sx={{ p: 2 }}>
               <FilterSidebar categories={categories} />
             </Paper>
