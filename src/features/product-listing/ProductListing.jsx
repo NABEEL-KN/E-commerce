@@ -8,6 +8,19 @@ import {
   CircularProgress,
   Grid,
 } from '@mui/material';
+
+// Simple debounce function
+const debounce = (func, wait) => {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+};
 import { Search as SearchIcon } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useGetProductsQuery } from '../../store/api/productApi';
@@ -29,16 +42,30 @@ const ProductListing = () => {
     },
     sortBy = 'price_asc'
   } = useSelector((state) => state.products);
-  const { data: products = [], isLoading, error } = useGetProductsQuery({
+  const { data: allProducts = [], isLoading, error } = useGetProductsQuery({
     limit: 24,
     category: filters.category === 'all' ? undefined : filters.category,
-    searchQuery: searchQuery || undefined,
     sortBy: sortBy || undefined
   });
 
+  // Case-insensitive search
+  const products = searchQuery 
+    ? allProducts.filter(product => 
+        product.title.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : allProducts;
+
+  // Debounced search to prevent excessive API calls
+  const debouncedSearch = React.useCallback(
+    (value) => {
+      dispatch(setSearchQuery(value));
+      dispatch(setPage(1));
+    },
+    [dispatch]
+  );
+
   const handleSearch = (event) => {
-    dispatch(setSearchQuery(event.target.value));
-    dispatch(setPage(1));
+    debounce(debouncedSearch(event.target.value), 300);
   };
 
   return (
@@ -113,10 +140,26 @@ const ProductListing = () => {
                     '& .MuiOutlinedInput-notchedOutline': {
                       border: 'none',
                     },
+                    '&:hover': {
+                      '& .MuiOutlinedInput-root': {
+                        bgcolor: 'rgba(33,150,243,0.04)',
+                      }
+                    },
+                    '&.Mui-focused': {
+                      '& .MuiOutlinedInput-root': {
+                        bgcolor: 'rgba(33,150,243,0.08)',
+                      }
+                    }
                   }}
                   InputProps={{
                     startAdornment: (
-                      <IconButton edge="start" sx={{ color: 'primary.main', mr: 1 }}>
+                      <IconButton 
+                        edge="start" 
+                        sx={{ 
+                          color: 'primary.main', 
+                          mr: 1 
+                        }}
+                      >
                         <SearchIcon />
                       </IconButton>
                     ),

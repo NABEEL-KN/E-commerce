@@ -17,20 +17,22 @@ import {
 import { ShoppingBag, Favorite, LocalShipping, Support } from '@mui/icons-material';
 import { useGetProductsQuery } from '../store/api/productApi';
 import ProductCard from '../components/products/ProductCard';
+import FilterSidebar from '../components/filters/FilterSidebar';
+import FilteredProductsList from '../components/products/FilteredProductsList';
 
 /**
  * HomePage component - Landing page for ShopSmart
  */
 const HomePage = () => {
   // Fetch featured products using RTK Query
-  const { data: products, isLoading } = useGetProductsQuery({ limit: 4 });
+  const { data: products, isLoading } = useGetProductsQuery();
   
-  // Featured categories - in a real app, these might come from an API
+  // Categories - in a real app, these might come from an API
   const categories = [
-    { id: 1, name: "Electronics", image: "https://fakestoreapi.com/img/81QpkIctqPL._AC_SX679_.jpg" },
-    { id: 2, name: "Jewelry", image: "https://fakestoreapi.com/img/71YAIFU48IL._AC_UL640_QL65_ML3_.jpg" },
-    { id: 3, name: "Men's Clothing", image: "https://fakestoreapi.com/img/71li-ujtlUL._AC_UX679_.jpg" },
-    { id: 4, name: "Women's Clothing", image: "https://fakestoreapi.com/img/71z3kpMAYsL._AC_UY879_.jpg" },
+    { id: 1, name: "Electronics" },
+    { id: 2, name: "Jewelry" },
+    { id: 3, name: "Men's Clothing" },
+    { id: 4, name: "Women's Clothing" }
   ];
   
   return (
@@ -94,44 +96,20 @@ const HomePage = () => {
         </Grid>
       </Paper>
 
-      {/* Featured Categories */}
+      {/* Product Grid with Filters */}
       <Container maxWidth="lg" sx={{ mb: 6 }}>
-        <Typography variant="h4" component="h2" gutterBottom sx={{ mb: 4 }}>
-          Shop by Category
-        </Typography>
-        <Grid container spacing={3}>
-          {categories.map((category) => (
-            <Grid item xs={6} md={3} key={category.id}>
-              <Card
-                component={RouterLink}
-                to={`/products?category=${encodeURIComponent(category.name.toLowerCase())}`}
-                sx={{
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  textDecoration: 'none',
-                  transition: 'transform 0.2s',
-                  '&:hover': {
-                    transform: 'scale(1.03)',
-                  },
-                }}
-              >
-                <CardMedia
-                  component="img"
-                  height="140"
-                  image={category.image}
-                  alt={category.name}
-                  sx={{ objectFit: 'contain', p: 2, backgroundColor: '#f5f5f5' }}
-                />
-                <CardContent sx={{ flexGrow: 1, textAlign: 'center' }}>
-                  <Typography gutterBottom variant="h6" component="div">
-                    {category.name}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
+        <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap' }}>
+          <Box sx={{ flex: '0 1 300px', order: 2, mb: 3 }}>
+            <Paper sx={{ p: 2 }}>
+              <FilterSidebar categories={categories} />
+            </Paper>
+          </Box>
+          <Box sx={{ flex: '1 1 0', order: 1 }}>
+            <Paper sx={{ p: 2 }}>
+              <FilteredProductsList />
+            </Paper>
+          </Box>
+        </Box>
       </Container>
 
       {/* Featured Products */}
