@@ -7,6 +7,7 @@ const initialState = {
     min: 0,
     max: 10000
   },
+  minRating: 0,
   viewMode: 'grid',
   sortOption: 'title_asc'
 };
@@ -24,6 +25,9 @@ const filterSlice = createSlice({
     setPriceRange: (state, action) => {
       state.priceRange = action.payload;
     },
+    setMinRating: (state, action) => {
+      state.minRating = action.payload;
+    },
     setViewMode: (state, action) => {
       state.viewMode = action.payload;
     },
@@ -34,6 +38,7 @@ const filterSlice = createSlice({
       state.searchQuery = '';
       state.selectedCategory = null;
       state.priceRange = initialState.priceRange;
+      state.minRating = 0;
     }
   }
 });
@@ -42,6 +47,7 @@ export const {
   setSearchQuery, 
   setSelectedCategory, 
   setPriceRange, 
+  setMinRating,
   setViewMode,
   setSortOption,
   resetFilters 

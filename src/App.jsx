@@ -4,6 +4,8 @@ import { store } from './store';
 import { ThemeProvider, CssBaseline } from '@mui/material';
 import { theme } from "./theme";
 import Layout from './components/layout/Layout';
+import { StagewiseToolbar } from '@stagewise/toolbar-react';
+import { ReactPlugin } from '@stagewise-plugins/react';
 
 // Pages
 import ProductListing from './features/product-listing/ProductListing';
@@ -23,6 +25,11 @@ function App() {
     <Provider store={store}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
+        <StagewiseToolbar
+          config={{
+            plugins: [ReactPlugin]
+          }}
+        />
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Layout />}>

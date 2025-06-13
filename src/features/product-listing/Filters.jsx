@@ -8,8 +8,6 @@ import {
   Switch,
   FormControlLabel,
   Typography,
-  Grid,
-  Divider
 } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { setFilters } from '../../store/slices/productSlice';
@@ -45,82 +43,63 @@ const Filters = () => {
   };
 
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={12}>
-        <Box
+    <Box
+      sx={{
+        bgcolor: 'white',
+        borderRadius: 2,
+        p: 2,
+        boxShadow: '0 2px 8px 0 rgba(60,72,88,0.06)',
+        border: '1px solid',
+        borderColor: 'grey.200',
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        justifyContent: 'flex-start',
+        textAlign: 'left',
+        gap: 2,
+        height: '100%',
+        minHeight: '100%'
+      }}
+    >
+      <Typography variant="subtitle1" sx={{ fontWeight: 500, mb: 1, width: '100%', textAlign: 'left' }}>
+        Filters
+      </Typography>
+      
+      {/* Category */}
+      <FormControl fullWidth size="small" sx={{ textAlign: 'left' }}>
+        <InputLabel>Category</InputLabel>
+        <Select
+          value={filters.category || 'all'}
+          label="Category"
+          onChange={handleCategoryChange}
           sx={{
-            bgcolor: 'grey.50',
-            borderRadius: 2,
-            p: { xs: 2, md: 2.5 },
-            boxShadow: '0 2px 8px 0 rgba(60,72,88,0.06)',
-            border: '1px solid',
-            borderColor: 'grey.200',
-            minWidth: 0,
-            width: '100%',
-            boxSizing: 'border-box',
-            display: 'flex',
-            flexDirection: { xs: 'column', md: 'row' },
-            alignItems: { md: 'center' },
-            gap: { xs: 2, md: 3 },
+            bgcolor: 'white',
+            borderRadius: 1,
+            textAlign: 'left'
           }}
         >
-          {/* Category */}
-          <Box sx={{ flex: 1 }}>
-            <FormControl fullWidth size="small">
-              <InputLabel sx={{ color: 'text.secondary' }}>Category</InputLabel>
-              <Select
-                value={filters.category || 'all'}
-                label="Category"
-                onChange={handleCategoryChange}
-                sx={{
-                  bgcolor: 'grey.50',
-                  borderRadius: 2,
-                  '& .MuiSelect-select': {
-                    py: 1.5,
-                    px: 2
-                  }
-                }}
-              >
-                {categoryOptions.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Box>
+          {categoryOptions.map((option) => (
+            <MenuItem key={option.value} value={option.value}>
+              {option.label}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
 
-          {/* Rating Filter */}
-          <Box sx={{ flex: 1 }}>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={filters.rating}
-                  onChange={handleRatingChange}
-                  size="small"
-                  sx={{
-                    '& .MuiSwitch-switchBase': {
-                      color: 'primary.main',
-                      '&.Mui-checked': {
-                        color: 'primary.main',
-                      },
-                    },
-                    '& .MuiSwitch-track': {
-                      backgroundColor: 'rgba(33,150,243,0.15)',
-                    },
-                  }}
-                />
-              }
-              label={
-                <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
-                  4+ Rating
-                </Typography>
-              }
-            />
-          </Box>
-        </Box>
-      </Grid>
-    </Grid>
+      {/* Rating Filter */}
+      <FormControlLabel
+        control={
+          <Switch
+            checked={filters.rating}
+            onChange={handleRatingChange}
+            size="small"
+          />
+        }
+        label="4+ Rating"
+        sx={{ alignSelf: 'flex-start', textAlign: 'left' }}
+      />
+    </Box>
   );
 };
 

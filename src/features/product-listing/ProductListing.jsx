@@ -7,6 +7,7 @@ import {
   IconButton,
   CircularProgress,
   Grid,
+  Paper,
 } from '@mui/material';
 
 // Simple debounce function
@@ -127,9 +128,9 @@ const ProductListing = () => {
         </Typography>
 
         {/* Filters, Search, Sort Section */}
-        <Grid container spacing={10} alignItems="stretch" sx={{ mb: 2 }}>
-          {/* Filters Sidebar */}
-          <Grid item xs={12} md={2} lg={2}>
+        <Grid container spacing={2} sx={{ mb: 3 }}>
+          {/* Filters */}
+          <Grid item xs={12} md={3}>
             <Filters
               filters={filters}
               onFilterChange={(newFilters) => dispatch(setFilters(newFilters))}
@@ -137,101 +138,56 @@ const ProductListing = () => {
           </Grid>
 
           {/* Search and Sort */}
-          <Grid item xs={12} md={10} lg={10}>
-            <Box
+          <Grid item xs={12} md={9}>
+            <Paper
+              elevation={0}
               sx={{
-                bgcolor: 'white',
-                borderRadius: 3,
-                boxShadow: '0 2px 8px 0 rgba(60,72,88,0.10)',
-                p: { xs: 2, md: 2.5 },
                 display: 'flex',
-                flexDirection: { xs: 'column', md: 'row' },
                 alignItems: 'center',
-                gap: { xs: 2, md: 3 },
-                width: '100%',
-                minWidth: 0,
-                boxSizing: 'border-box',
-                mb: 2,
+                gap: 2,
+                bgcolor: 'background.paper',
+                borderRadius: 2,
+                p: 2,
+                border: '1px solid',
+                borderColor: 'divider',
+                height: '100%',
+                minHeight: '100%'
               }}
             >
-              <Box sx={{ flex: 2, mr: { md: 2 } }}>
-                <TextField
-                  fullWidth
-                  placeholder="Search products…"
-                  value={searchQuery}
-                  onChange={handleSearch}
-                  size="medium"
-                  sx={{
-                    bgcolor: 'white',
-                    borderRadius: 2,
-                    boxShadow: 'none',
-                    '& .MuiInputBase-root': {
-                      fontSize: 16,
-                      fontWeight: 500,
-                      bgcolor: 'white',
-                    },
-                    '& .MuiOutlinedInput-notchedOutline': {
-                      border: 'none',
-                    },
-                    '&:hover': {
-                      '& .MuiOutlinedInput-root': {
-                        bgcolor: 'rgba(33,150,243,0.04)',
-                      }
-                    },
-                    '&.Mui-focused': {
-                      '& .MuiOutlinedInput-root': {
-                        bgcolor: 'rgba(33,150,243,0.08)',
-                      }
-                    }
-                  }}
-                  InputProps={{
-                    startAdornment: (
-                      <IconButton 
-                        edge="start" 
-                        sx={{ 
-                          color: 'primary.main', 
-                          mr: 1 
-                        }}
-                      >
-                        <SearchIcon />
-                      </IconButton>
-                    ),
-                  }}
-                />
-              </Box>
-              <Box sx={{ flexShrink: 0, minWidth: 160, width: { xs: '100%', md: 'auto' }, display: 'flex', alignItems: 'center' }}>
-                <SortDropdown
-                  value={sortBy}
-                  onChange={(newSort) => dispatch(setSortBy(newSort))}
-                  sx={{
-                    bgcolor: 'white',
-                    borderRadius: 2,
-                    boxShadow: 'none',
-                    fontWeight: 500,
-                    minWidth: 160,
-                    '& .MuiSelect-select': {
-                      py: 1.2,
-                      px: 2,
-                      display: 'flex',
-                      alignItems: 'center',
-                    },
-                  }}
-                />
-              </Box>
-            </Box>
+              <TextField
+                fullWidth
+                placeholder="Search products..."
+                value={searchQuery}
+                onChange={handleSearch}
+                size="small"
+                InputProps={{
+                  startAdornment: (
+                    <IconButton edge="start" sx={{ color: 'primary.main' }}>
+                      <SearchIcon />
+                    </IconButton>
+                  ),
+                }}
+              />
+              <SortDropdown
+                value={sortBy}
+                onChange={(newSort) => dispatch(setSortBy(newSort))}
+                sx={{ minWidth: 180 }}
+              />
+            </Paper>
           </Grid>
         </Grid>
 
         {/* Products Section */}
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            <Box
+            <Paper
+              elevation={0}
               sx={{
-                minHeight: 500,
-                p: { xs: 1, md: 2 },
+                p: 2,
                 borderRadius: 2,
                 bgcolor: 'background.paper',
-                boxShadow: '0 1px 8px 0 rgba(60,72,88,0.06)',
+                border: '1px solid',
+                borderColor: 'divider',
               }}
             >
               {isLoading ? (
@@ -253,10 +209,7 @@ const ProductListing = () => {
                     alignItems: 'center',
                     justifyContent: 'center',
                     minHeight: 400,
-                    bgcolor: 'background.paper',
-                    borderRadius: 2,
                     p: 4,
-                    boxShadow: 1,
                   }}
                 >
                   <Typography variant="h6" color="error" sx={{ mb: 2 }}>
@@ -274,7 +227,7 @@ const ProductListing = () => {
                   </Box>
                 </>
               )}
-            </Box>
+            </Paper>
           </Grid>
         </Grid>
       </Container>
