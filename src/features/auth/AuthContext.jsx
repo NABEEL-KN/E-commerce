@@ -18,10 +18,35 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
-  // Load users from localStorage
+  // Load users from localStorage with sample users
   const loadUsers = () => {
     const users = localStorage.getItem('users');
-    return users ? JSON.parse(users) : [];
+    const existingUsers = users ? JSON.parse(users) : [];
+    
+    // Add sample users if none exist
+    if (existingUsers.length === 0) {
+      const sampleUsers = [
+        {
+          id: '1',
+          name: 'John Doe',
+          email: 'john@example.com',
+          password: 'password123',
+          role: 'user',
+          createdAt: new Date().toISOString()
+        },
+        {
+          id: '2',
+          name: 'Jane Smith',
+          email: 'jane@example.com',
+          password: 'securepass123',
+          role: 'user',
+          createdAt: new Date().toISOString()
+        }
+      ];
+      localStorage.setItem('users', JSON.stringify(sampleUsers));
+      return sampleUsers;
+    }
+    return existingUsers;
   };
 
   // Signup function
