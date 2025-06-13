@@ -12,7 +12,7 @@ const Footer = () => {
     <Box
       component="footer"
       sx={{
-        py: 4,
+        py: 3,
         px: 2,
         mt: 'auto',
         backgroundColor: theme.palette.grey[900],
@@ -36,7 +36,7 @@ const Footer = () => {
             <Typography variant="h6" gutterBottom>
               Quick Links
             </Typography>
-            <Link href="/" color="inherit" display="block" sx={{ mb: 1, '&:hover': { textDecoration: 'underline' } }}>
+            <Link href="/" color="inherit" sx={{ textDecoration: 'none', display: 'block', mb: 1, '&:hover': { textDecoration: 'underline' } }}>
               Home
             </Link>
             <Link href="/products" color="inherit" display="block" sx={{ mb: 1, '&:hover': { textDecoration: 'underline' } }}>
@@ -53,10 +53,10 @@ const Footer = () => {
             <Typography variant="h6" gutterBottom>
               Contact Us
             </Typography>
-            <Typography variant="body2" color="grey.400" paragraph>
+            <Typography variant="body2" color="grey.400" paragraph sx={{ mb: 1 }}>
               Email: info@shopsmart.com
             </Typography>
-            <Typography variant="body2" color="grey.400" paragraph>
+            <Typography variant="body2" color="grey.400" paragraph sx={{ mb: 2 }}>
               Phone: +1 (123) 456-7890
             </Typography>
             <Box sx={{ display: 'flex', gap: 1 }}>

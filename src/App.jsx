@@ -1,17 +1,19 @@
 import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import { ThemeProvider, CssBaseline } from '@mui/material';
-import { theme } from './theme';
+
+// Store
 import { store } from './store/store';
+
+// Layout
 import Layout from './components/layout/Layout';
 
 // Pages
-import HomePage from './pages/HomePage';
-import ProductsPage from './pages/ProductsPage';
-import ProductDetailPage from './pages/ProductDetailPage';
-import CartPage from './pages/CartPage';
-import CheckoutPage from './pages/CheckoutPage';
-import LoginPage from './pages/LoginPage';
+import ProductListing from './features/product-listing/ProductListing';
+import LoginPage from './features/auth/LoginPage';
+import RegisterPage from './features/auth/RegisterPage';
+import ProfilePage from './features/user/ProfilePage';
+
+// Theme
+import { theme } from './theme';
 
 // Pages to be implemented
 const OrderHistoryPage = () => <div>Order History Page (to be implemented)</div>;
