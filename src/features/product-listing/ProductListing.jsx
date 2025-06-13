@@ -127,9 +127,9 @@ const ProductListing = () => {
         </Typography>
 
         {/* Filters, Search, Sort Section */}
-        <Grid container spacing={8} alignItems="stretch" sx={{ mb: 2 }}>
+        <Grid container spacing={10} alignItems="stretch" sx={{ mb: 2 }}>
           {/* Filters Sidebar */}
-          <Grid item xs={12} md={3} lg={2.5}>
+          <Grid item xs={12} md={2} lg={2}>
             <Filters
               filters={filters}
               onFilterChange={(newFilters) => dispatch(setFilters(newFilters))}
@@ -137,7 +137,7 @@ const ProductListing = () => {
           </Grid>
 
           {/* Search and Sort */}
-          <Grid item xs={12} md={9} lg={9.5}>
+          <Grid item xs={12} md={10} lg={10}>
             <Box
               sx={{
                 bgcolor: 'white',
