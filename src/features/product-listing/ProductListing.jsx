@@ -121,10 +121,10 @@ const ProductListing = () => {
             color: 'primary.main',
             textAlign: 'center',
             mb: 2.5,
-            textShadow: '0 2px 12px rgba(60,72,88,0.08)',
+            textShadow: '0 2px 12px rgba(78, 28, 114, 0.08)',
           }}
         >
-          ShopSmart Products
+          ShopSmart Products 
         </Typography>
 
         {/* Filters, Search, Sort Section */}
