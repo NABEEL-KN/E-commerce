@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useCallback } from 'react';
+import { useState, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   Box,
@@ -29,8 +29,6 @@ import {
 } from '@mui/icons-material';
 import { useTheme } from '@mui/material/styles';
 import { useGetProductsQuery, useGetCategoriesQuery } from '../store/api/productApi';
-import { debounce } from 'lodash';
-import { useSearchParams } from 'react-router-dom';
 import FilterSidebar from '../components/filters/FilterSidebar';
 import FilteredProductsList from '../components/products/FilteredProductsList';
 import { 
@@ -40,7 +38,6 @@ import {
   setSelectedCategory,
   setPriceRange,
   setMinRating,
-  updateUrlParams,
   selectViewMode,
   selectSearchQuery,
   selectSelectedCategory,
@@ -57,62 +54,6 @@ const ProductsPage = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-  const [searchInput, setSearchInput] = useState('');
-  
-  const [searchParams] = useSearchParams();
-  
-  // Initialize filters from URL on component mount
-  useEffect(() => {
-    // Get all URL parameters
-    const urlSearchQuery = searchParams.get('q') || '';
-    const urlCategory = searchParams.get('category') || null;
-    const urlMinPrice = searchParams.get('minPrice');
-    const urlMaxPrice = searchParams.get('maxPrice');
-    const urlRating = searchParams.get('rating');
-    const urlSort = searchParams.get('sort');
-    const urlView = searchParams.get('view');
-    
-    // Set initial search input from URL
-    setSearchInput(urlSearchQuery);
-    
-    // Initialize filters from URL
-    const filters = {};
-    
-    if (urlSearchQuery) filters.searchQuery = urlSearchQuery;
-    if (urlCategory) filters.selectedCategory = urlCategory;
-    if (urlMinPrice || urlMaxPrice) {
-      filters.priceRange = {
-        min: urlMinPrice ? Number(urlMinPrice) : 0,
-        max: urlMaxPrice ? Number(urlMaxPrice) : 10000
-      };
-    }
-    if (urlRating) filters.minRating = Number(urlRating);
-    if (urlSort) filters.sortOption = urlSort;
-    if (urlView) filters.viewMode = urlView;
-    
-    if (Object.keys(filters).length > 0) {
-      dispatch(setFilters(filters));
-    }
-  }, [dispatch, searchParams]);
-  
-  // Debounced search handler
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const debouncedSearch = useCallback(
-    debounce((value) => {
-      dispatch(setSearchQuery(value));
-    }, 500),
-    [dispatch]
-  );
-  
-  // Update debounced search when searchInput changes
-  useEffect(() => {
-    debouncedSearch(searchInput);
-    
-    // Cleanup
-    return () => {
-      debouncedSearch.cancel();
-    };
-  }, [searchInput, debouncedSearch]);
 
   // Get categories
   const { data: categories = [], isLoading: isCategoriesLoading } = useGetCategoriesQuery();
@@ -131,8 +72,8 @@ const ProductsPage = () => {
   const minRating = useSelector(selectMinRating);
   const viewMode = useSelector(selectViewMode);
   const sortOption = useSelector(selectSortOption);
-  
-  // Memoize the active filter count
+
+  // Count active filters
   const activeFilterCount = useMemo(() => {
     let count = 0;
     if (searchQuery) count++;
@@ -141,37 +82,20 @@ const ProductsPage = () => {
     if (minRating > 0) count++;
     return count;
   }, [searchQuery, selectedCategory, priceRange, minRating]);
-  
-  // Memoize filter values to prevent unnecessary re-renders
-  const filterValues = useMemo(
-    () => ({
-      searchQuery,
-      selectedCategory,
-      priceRange,
-      minRating,
-      sortOption
-    }),
-    [searchQuery, selectedCategory, priceRange, minRating, sortOption]
-  );
 
   // Handlers
   const handleSearch = (e) => {
-    const value = e.target.value;
-    setSearchInput(value);
+    dispatch(setSearchQuery(e.target.value));
   };
 
-  const handleClearFilters = useCallback(() => {
+  const handleClearFilters = () => {
     dispatch(resetFilters());
-    setSearchInput('');
-    
-    // Update URL after a short delay
-    setTimeout(() => {
-      dispatch(updateUrlParams());
-    }, 0);
-  }, [dispatch]);
+  };
 
-  const handleViewModeChange = (newViewMode) => {
-    dispatch(setViewMode(newViewMode));
+  const handleViewModeChange = (event, newViewMode) => {
+    if (newViewMode !== null) {
+      dispatch(setViewMode(newViewMode));
+    }
   };
 
   const toggleMobileFilters = () => {
@@ -205,6 +129,33 @@ const ProductsPage = () => {
       return typeof product.category === 'object' ? product.category.name : product.category;
     }))].filter(Boolean);
   }, [allProducts]);
+
+  // Show loading state
+  if (isProductsLoading || isCategoriesLoading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  // Show error state
+  if (productsError) {
+    return (
+      <Box sx={{ p: 3, textAlign: 'center' }}>
+        <Typography color="error" gutterBottom>
+          Failed to load products. Please try again later.
+        </Typography>
+        <Button 
+          variant="contained" 
+          color="primary" 
+          onClick={() => window.location.reload()}
+        >
+          Retry
+        </Button>
+      </Box>
+    );
+  }
 
   // Generate breadcrumbs
   const breadcrumbs = [
@@ -251,33 +202,6 @@ const ProductsPage = () => {
     });
   }
 
-  // Show loading state
-  if (isProductsLoading || isCategoriesLoading) {
-    return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
-        <CircularProgress />
-      </Box>
-    );
-  }
-
-  // Show error state
-  if (productsError) {
-    return (
-      <Box sx={{ p: 3, textAlign: 'center' }}>
-        <Typography color="error" gutterBottom>
-          Failed to load products. Please try again later.
-        </Typography>
-        <Button 
-          variant="contained" 
-          color="primary" 
-          onClick={() => window.location.reload()}
-        >
-          Retry
-        </Button>
-      </Box>
-    );
-  }
-
   return (
     <Container maxWidth="xl" sx={{ py: 4 }}>
       {/* Header */}
@@ -310,7 +234,7 @@ const ProductsPage = () => {
                   fullWidth
                   variant="outlined"
                   placeholder="Search products..."
-                  value={searchInput}
+                  value={searchQuery}
                   onChange={handleSearch}
                   InputProps={{
                     startAdornment: (
@@ -356,7 +280,7 @@ const ProductsPage = () => {
                   <Button
                     variant={viewMode === 'grid' ? 'contained' : 'outlined'}
                     size="small"
-                    onClick={() => handleViewModeChange('grid')}
+                    onClick={() => handleViewModeChange(null, 'grid')}
                     startIcon={<GridViewIcon />}
                   >
                     Grid
@@ -364,7 +288,7 @@ const ProductsPage = () => {
                   <Button
                     variant={viewMode === 'list' ? 'contained' : 'outlined'}
                     size="small"
-                    onClick={() => handleViewModeChange('list')}
+                    onClick={() => handleViewModeChange(null, 'list')}
                     startIcon={<ViewListIcon />}
                   >
                     List
@@ -396,15 +320,7 @@ const ProductsPage = () => {
           )}
 
           {/* Products Grid */}
-          <FilteredProductsList 
-            products={allProducts} 
-            viewMode={viewMode}
-            searchQuery={searchQuery}
-            selectedCategory={selectedCategory}
-            priceRange={priceRange}
-            minRating={minRating}
-            sortOption={sortOption}
-          />
+          <FilteredProductsList products={allProducts} />
         </Grid>
       </Grid>
 
@@ -432,16 +348,6 @@ const ProductsPage = () => {
         </Box>
         <Divider sx={{ mb: 2 }} />
         <FilterSidebar categories={uniqueCategories} />
-        <Box sx={{ mt: 3 }}>
-          <Button
-            fullWidth
-            variant="contained"
-            onClick={toggleMobileFilters}
-            sx={{ py: 1.5 }}
-          >
-            Apply Filters
-          </Button>
-        </Box>
       </Drawer>
     </Container>
   );
