@@ -12,8 +12,11 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const isAuthenticated = localStorage.getItem('isAuthenticated');
     if (isAuthenticated) {
-      // In a real app, you would fetch user data here
-      setCurrentUser({ username: 'admin' });
+      const storedUser = localStorage.getItem('currentUser');
+      if (storedUser) {
+        const user = JSON.parse(storedUser);
+        setCurrentUser(user);
+      }
     }
     setLoading(false);
   }, []);
@@ -73,6 +76,40 @@ export const AuthProvider = ({ children }) => {
   };
 
   // Login function
+  const updateProfile = async (updatedData) => {
+    try {
+      if (!currentUser) {
+        throw new Error('No user is currently logged in');
+      }
+
+      // Get all users from localStorage
+      const users = localStorage.getItem('users');
+      const existingUsers = users ? JSON.parse(users) : [];
+
+      // Find the current user and update their data
+      const updatedUsers = existingUsers.map(user => 
+        user.id === currentUser.id 
+          ? { ...user, ...updatedData }
+          : user
+      );
+
+      // Save updated users back to localStorage
+      localStorage.setItem('users', JSON.stringify(updatedUsers));
+
+      // Update current user state
+      const updatedCurrentUser = updatedUsers.find(user => user.id === currentUser.id);
+      setCurrentUser(updatedCurrentUser);
+
+      // Update currentUser in localStorage
+      localStorage.setItem('currentUser', JSON.stringify(updatedCurrentUser));
+
+      return updatedCurrentUser;
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      throw error;
+    }
+  };
+
   const login = async (email, password) => {
     try {
       const users = loadUsers();
@@ -104,7 +141,8 @@ export const AuthProvider = ({ children }) => {
     isAuthenticated: !!currentUser,
     signup,
     login,
-    logout
+    logout,
+    updateProfile
   };
 
   return (
