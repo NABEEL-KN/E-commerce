@@ -2,19 +2,42 @@ import { createTheme } from '@mui/material/styles';
 
 export const theme = createTheme({
   palette: {
+    // Main brand color - Teal
     primary: {
-      main: '#2196f3',
-      light: '#64b5f6',
-      dark: '#1976d2',
+      main: '#0d9488', // Teal 600
+      light: '#14b8a6', // Teal 500
+      dark: '#0f766e',  // Teal 700
+      contrastText: '#ffffff',
     },
+    // Secondary accent color
     secondary: {
-      main: '#f50057',
-      light: '#ff4081',
-      dark: '#c51162',
+      main: '#8b5cf6', // Violet 500
+      light: '#a78bfa', // Violet 400
+      dark: '#7c3aed',  // Violet 600
+      contrastText: '#ffffff',
     },
+    // Success state
+    success: {
+      main: '#10b981', // Emerald 500
+      light: '#34d399', // Emerald 400
+      dark: '#059669',  // Emerald 600
+    },
+    // Error state
+    error: {
+      main: '#ef4444', // Red 500
+      light: '#f87171', // Red 400
+      dark: '#dc2626',  // Red 600
+    },
+    // Background colors
     background: {
-      default: '#f5f5f5',
+      default: '#f8fafc', // Slate 50
       paper: '#ffffff',
+    },
+    // Text colors
+    text: {
+      primary: '#1e293b',   // Slate 800
+      secondary: '#475569', // Slate 600
+      disabled: '#94a3b8',  // Slate 400
     },
   },
   typography: {

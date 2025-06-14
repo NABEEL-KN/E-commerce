@@ -3,7 +3,8 @@ import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 // Store
 import { store } from './store/store';
 
-// Layout
+// Components
+import ErrorBoundary from './components/ErrorBoundary';
 import Layout from './components/layout/Layout';
 
 // Pages
@@ -21,19 +22,21 @@ const NotFoundPage = () => <div>404 - Page Not Found</div>;
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route index element={<HomePage />} />
-        <Route path="products" element={<ProductsPage />} />
-        <Route path="products/:id" element={<ProductDetailPage />} />
-        <Route path="cart" element={<CartPage />} />
-        <Route path="checkout" element={<CheckoutPage />} />
-        <Route path="login" element={<LoginForm />} />
-        <Route path="register" element={<RegisterForm />} />
-        <Route path="orders" element={<OrderHistoryPage />} />
-        <Route path="*" element={<NotFoundPage />} />
-      </Route>
-    </Routes>
+    <ErrorBoundary>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<HomePage />} />
+          <Route path="products" element={<ProductsPage />} />
+          <Route path="products/:id" element={<ProductDetailPage />} />
+          <Route path="cart" element={<CartPage />} />
+          <Route path="checkout" element={<CheckoutPage />} />
+          <Route path="login" element={<LoginForm />} />
+          <Route path="register" element={<RegisterForm />} />
+          <Route path="orders" element={<OrderHistoryPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Route>
+      </Routes>
+    </ErrorBoundary>
   );
 }
 
