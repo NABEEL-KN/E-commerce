@@ -149,7 +149,7 @@ const ProductCard = ({
           fullWidth
           onClick={onAddToCart}
         >
-          Add to Basket
+          Add to Cart
         </ActionButton>
       </StyledCardContent>
     </StyledCard>

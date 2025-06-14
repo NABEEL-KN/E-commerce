@@ -1,46 +1,41 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { ThemeProvider, CssBaseline } from '@mui/material';
+import { theme } from './theme';
+import { store } from './store/store';
 import Layout from './components/layout/Layout';
-import { AuthProvider } from './features/auth/AuthContext';
-import Login from './features/auth/Login';
-import Signup from './features/auth/Signup';
-import AuthRoutes from './features/auth/AuthRoutes';
-import Dashboard from './pages/Dashboard';
-
-// Protected route component
-const ProtectedRoute = () => {
-  const isAuthenticated = localStorage.getItem('isAuthenticated');
-  return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
-};
 
 // Pages
-import ProductListing from './features/product-listing/ProductListing';
-const HomePage = () => <div>Home Page (to be implemented)</div>;
-const ProductsPage = () => <ProductListing />;
-const ProductDetailPage = () => <div>Product Detail Page (to be implemented)</div>;
-const CartPage = () => <div>Cart Page (to be implemented)</div>;
+import HomePage from './pages/HomePage';
+import ProductsPage from './pages/ProductsPage';
+import ProductDetailPage from './pages/ProductDetailPage';
+import CartPage from './pages/CartPage';
+import LoginPage from './pages/LoginPage';
+
+// Pages to be implemented
 const CheckoutPage = () => <div>Checkout Page (to be implemented)</div>;
-const ProfilePage = () => <div>Profile Page (to be implemented)</div>;
 const OrderHistoryPage = () => <div>Order History Page (to be implemented)</div>;
 const NotFoundPage = () => <div>404 - Page Not Found</div>;
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<HomePage />} />
-          <Route path="products" element={<ProductsPage />} />
-          <Route path="products/:id" element={<ProductDetailPage />} />
-          <Route path="cart" element={<CartPage />} />
-          <Route path="checkout" element={<CheckoutPage />} />
-          <Route path="login" element={<LoginPage />} />
-          <Route path="register" element={<RegisterPage />} />
-          <Route path="profile" element={<ProfilePage />} />
-          <Route path="orders" element={<OrderHistoryPage />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<HomePage />} />
+            <Route path="products" element={<ProductsPage />} />
+            <Route path="products/:id" element={<ProductDetailPage />} />
+            <Route path="cart" element={<CartPage />} />
+            <Route path="checkout" element={<CheckoutPage />} />
+            <Route path="login" element={<LoginPage />} />
+            <Route path="orders" element={<OrderHistoryPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Route>
+        </Routes>
+      </ThemeProvider>
+    </Provider>
   );
 }
 

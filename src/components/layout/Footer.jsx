@@ -12,20 +12,23 @@ const Footer = () => {
     <Box
       component="footer"
       sx={{
-        py: 3,
+        py: 4,
         px: 2,
         mt: 'auto',
         backgroundColor: theme.palette.grey[900],
         color: 'white',
+        width: '100%',
+        borderTop: '1px solid',
+        borderColor: 'grey.800'
       }}
     >
       <Container maxWidth="lg">
-        <Grid container spacing={5}>
+        <Grid container spacing={4}>
           <Grid item xs={12} sm={4}>
             <Typography variant="h6" gutterBottom>
               ShopSmart
             </Typography>
-            <Typography variant="body2">
+            <Typography variant="body2" color="grey.400">
               Your one-stop shop for all your shopping needs. Quality products, competitive prices, and excellent service.
             </Typography>
           </Grid>
@@ -33,22 +36,28 @@ const Footer = () => {
             <Typography variant="h6" gutterBottom>
               Quick Links
             </Typography>
-            <Link href="/" color="inherit" sx={{ textDecoration: 'none', display: 'block', mb: 1, '&:hover': { textDecoration: 'underline' } }}>
+            <Link href="/" color="inherit" display="block" sx={{ mb: 1, '&:hover': { textDecoration: 'underline' } }}>
               Home
             </Link>
-            <Link href="/products" color="inherit" sx={{ textDecoration: 'none', display: 'block', mb: 1, '&:hover': { textDecoration: 'underline' } }}>
+            <Link href="/products" color="inherit" display="block" sx={{ mb: 1, '&:hover': { textDecoration: 'underline' } }}>
               Products
             </Link>
-            <Link href="/cart" color="inherit" sx={{ textDecoration: 'none', display: 'block', mb: 1, '&:hover': { textDecoration: 'underline' } }}>
+            <Link href="/cart" color="inherit" display="block" sx={{ mb: 1, '&:hover': { textDecoration: 'underline' } }}>
               Cart
             </Link>
-            <Link href="/login" color="inherit" sx={{ textDecoration: 'none', display: 'block', mb: 1, '&:hover': { textDecoration: 'underline' } }}>
+            <Link href="/login" color="inherit" display="block" sx={{ mb: 1, '&:hover': { textDecoration: 'underline' } }}>
               Login
             </Link>
           </Grid>
           <Grid item xs={12} sm={4}>
             <Typography variant="h6" gutterBottom>
-              Follow Us
+              Contact Us
+            </Typography>
+            <Typography variant="body2" color="grey.400" paragraph>
+              Email: info@shopsmart.com
+            </Typography>
+            <Typography variant="body2" color="grey.400" paragraph>
+              Phone: +1 (123) 456-7890
             </Typography>
             <Box sx={{ display: 'flex', gap: 1 }}>
               <IconButton href="https://facebook.com" target="_blank" aria-label="Facebook" sx={{ color: 'white', '&:hover': { color: '#1877F2' } }}>
@@ -69,11 +78,9 @@ const Footer = () => {
             </Box>
           </Grid>
         </Grid>
-        <Box sx={{ pt: 5, mt: 5, borderTop: `1px solid ${theme.palette.grey[800]}` }}>
-          <Typography variant="body2" align="center">
-            {'© '}
-            {new Date().getFullYear()}
-            {' ShopSmart. All rights reserved.'}
+        <Box sx={{ pt: 4, mt: 4, borderTop: `1px solid ${theme.palette.grey[800]}` }}>
+          <Typography variant="body2" color="grey.400" align="center">
+            © {new Date().getFullYear()} ShopSmart. All rights reserved.
           </Typography>
         </Box>
       </Container>

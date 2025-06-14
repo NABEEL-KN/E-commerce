@@ -1,10 +1,10 @@
 // Product-related constants
-export const SORT_OPTIONS = {
-  PRICE_ASC: 'price-asc',
-  PRICE_DESC: 'price-desc',
-  RATING_DESC: 'rating-desc',
-  NEWEST: 'newest',
-};
+export const SORT_OPTIONS = [
+  { value: 'price-asc', label: 'Price: Low to High' },
+  { value: 'price-desc', label: 'Price: High to Low' },
+  { value: 'rating-desc', label: 'Top Rated' },
+  { value: 'newest', label: 'Newest' },
+];
 
 export const VIEW_MODES = {
   GRID: 'grid',

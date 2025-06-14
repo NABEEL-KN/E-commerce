@@ -26,8 +26,7 @@ import {
   Share,
   ArrowBack,
 } from '@mui/icons-material';
-import { useGetProductQuery } from '../store/api/productApi';
-import { useGetProductReviewsQuery } from '../store/api/productApi';
+import { useGetProductByIdQuery } from '../store/api/productApi';
 import useCart from '../hooks/useCart';
 import { formatPrice } from '../utils/formatters';
 import LoadingSpinner from '../components/common/LoadingSpinner';
@@ -50,7 +49,7 @@ const ProductDetailPage = () => {
     data: product,
     isLoading,
     error,
-  } = useGetProductQuery(id);
+  } = useGetProductByIdQuery(id);
   
   // Fetch product reviews (placeholder - would be implemented in a real API)
   // This is a mock since Fake Store API doesn't have reviews
