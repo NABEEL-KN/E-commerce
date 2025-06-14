@@ -21,18 +21,26 @@ import EditProfilePage from './pages/EditProfilePage';
 const OrderHistoryPage = () => <div>Order History Page (to be implemented)</div>;
 const NotFoundPage = () => <div>404 - Page Not Found</div>;
 
+// Component for routes that should not have the layout (login, register)
+const WithoutLayout = () => <Outlet />;
+
 function App() {
   return (
     <ErrorBoundary>
       <Routes>
+        {/* Routes without layout */}
+        <Route element={<WithoutLayout />}>
+          <Route path="/login" element={<LoginForm />} />
+          <Route path="/register" element={<RegisterForm />} />
+        </Route>
+        
+        {/* Routes with layout */}
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
           <Route path="products" element={<ProductsPage />} />
           <Route path="products/:id" element={<ProductDetailPage />} />
           <Route path="cart" element={<CartPage />} />
           <Route path="checkout" element={<CheckoutPage />} />
-          <Route path="login" element={<LoginForm />} />
-          <Route path="register" element={<RegisterForm />} />
           <Route path="profile" element={<ProfilePage />} />
           <Route path="profile/edit" element={<EditProfilePage />} />
           <Route path="orders" element={<OrderHistoryPage />} />
