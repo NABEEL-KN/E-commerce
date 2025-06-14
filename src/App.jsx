@@ -10,10 +10,10 @@ import HomePage from './pages/HomePage';
 import ProductsPage from './pages/ProductsPage';
 import ProductDetailPage from './pages/ProductDetailPage';
 import CartPage from './pages/CartPage';
+import CheckoutPage from './pages/CheckoutPage';
 import LoginPage from './pages/LoginPage';
 
 // Pages to be implemented
-const CheckoutPage = () => <div>Checkout Page (to be implemented)</div>;
 const OrderHistoryPage = () => <div>Order History Page (to be implemented)</div>;
 const NotFoundPage = () => <div>404 - Page Not Found</div>;
 
