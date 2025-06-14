@@ -7,11 +7,15 @@ import { format } from 'date-fns';
  * @returns {string} Formatted price string
  */
 export const formatPrice = (price, currency = 'USD') => {
+  // Handle undefined, null, or NaN values by defaulting to 0
+  const safePrice = (price === undefined || price === null || isNaN(price)) ? 0 : Number(price);
+  
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency,
     minimumFractionDigits: 2,
-  }).format(price);
+    maximumFractionDigits: 2
+  }).format(safePrice);
 };
 
 /**

@@ -21,9 +21,9 @@ const cartSlice = createSlice({
         state.items.push({
           id: product.id,
           title: product.title,
-          price: product.price,
+          price: parseFloat(product.price) || 0, // Ensure price is a number
           image: product.image,
-          quantity,
+          quantity: parseInt(quantity, 10) || 1, // Ensure quantity is a number
         });
       }
     },
@@ -90,8 +90,13 @@ export const {
 
 // Selectors
 export const selectCartItems = state => state.cart.items;
-export const selectCartTotal = state => 
-  state.cart.items.reduce((total, item) => total + (item.price * item.quantity), 0);
+export const selectCartTotal = state => {
+  return state.cart.items.reduce((total, item) => {
+    const price = parseFloat(item.price) || 0;
+    const quantity = parseInt(item.quantity, 10) || 0;
+    return total + (price * quantity);
+  }, 0);
+};
 export const selectCartItemCount = state => 
   state.cart.items.reduce((count, item) => count + item.quantity, 0);
 
