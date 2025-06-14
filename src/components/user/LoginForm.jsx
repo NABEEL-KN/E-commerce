@@ -137,7 +137,7 @@ const Login = () => {
     try {
       const result = await login(email, password);
       if (result.success) {
-        navigate('/dashboard');
+        navigate('/');
       } else {
         setError(result.message || 'Login failed. Please check your credentials.');
       }
@@ -251,7 +251,7 @@ const Login = () => {
           <Box sx={{ textAlign: 'center', mt: 2 }}>
             <Typography variant="body2" color="text.secondary">
               Don't have an account?{' '}
-              <StyledLink to="/signup">
+              <StyledLink to="/register">
                 Sign up
               </StyledLink>
             </Typography>

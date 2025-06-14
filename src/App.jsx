@@ -7,13 +7,14 @@ import { store } from './store/store';
 import Layout from './components/layout/Layout';
 
 // Pages
-import ProductListing from './features/product-listing/ProductListing';
-import LoginPage from './features/auth/LoginPage';
-import RegisterPage from './features/auth/RegisterPage';
-import ProfilePage from './features/user/ProfilePage';
-
-// Theme
-import { theme } from './theme';
+import HomePage from './pages/HomePage';
+import ProductsPage from './pages/ProductsPage';
+import ProductDetailPage from './pages/ProductDetailPage';
+import CartPage from './pages/CartPage';
+import CheckoutPage from './pages/CheckoutPage';
+import LoginForm from './components/user/LoginForm';
+import RegisterForm from './components/user/RegisterForm';
+import ProfilePage from './pages/ProfilePage';
 
 // Pages to be implemented
 const OrderHistoryPage = () => <div>Order History Page (to be implemented)</div>;
@@ -21,52 +22,20 @@ const NotFoundPage = () => <div>404 - Page Not Found</div>;
 
 function App() {
   return (
-    <AuthProvider>
-      <Routes>
-        <Route path="/login" element={<LoginForm />} />
-        <Route path="/signup" element={<RegisterForm />} />
-        
-        {/* Protected routes */}
-        <Route path="/" element={<Layout />}>
-          <Route index element={
-            <AuthRoutes>
-              <HomePage />
-            </AuthRoutes>
-          } />
-          <Route path="products" element={
-            <AuthRoutes>
-              <ProductsPage />
-            </AuthRoutes>
-          } />
-          <Route path="products/:id" element={
-            <AuthRoutes>
-              <ProductDetailPage />
-            </AuthRoutes>
-          } />
-          <Route path="cart" element={
-            <AuthRoutes>
-              <CartPage />
-            </AuthRoutes>
-          } />
-          <Route path="checkout" element={
-            <AuthRoutes>
-              <CheckoutPage />
-            </AuthRoutes>
-          } />
-          <Route path="profile" element={
-            <AuthRoutes>
-              <UserProfile />
-            </AuthRoutes>
-          } />
-          <Route path="orders" element={
-            <AuthRoutes>
-              <OrderHistoryPage />
-            </AuthRoutes>
-          } />
-          <Route path="*" element={<NotFoundPage />} />
-        </Route>
-      </Routes>
-    </AuthProvider>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<HomePage />} />
+        <Route path="products" element={<ProductsPage />} />
+        <Route path="products/:id" element={<ProductDetailPage />} />
+        <Route path="cart" element={<CartPage />} />
+        <Route path="checkout" element={<CheckoutPage />} />
+        <Route path="login" element={<LoginForm />} />
+        <Route path="register" element={<RegisterForm />} />
+        <Route path="profile" element={<ProfilePage />} />
+        <Route path="orders" element={<OrderHistoryPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Route>
+    </Routes>
   );
 }
 
