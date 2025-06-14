@@ -263,7 +263,7 @@ const CartPage = () => {
               }}
               fullWidth={isMobile}
             >
-              {totalItems > 0 ? `Proceed to Checkout (${formatPrice(total)})` : 'Your Cart is Empty'}
+              {totalItems > 0 ? `Proceed to Checkout (${formatPrice(total)})` : 'Checkout'}
             </Button>
             
             {/* Shipping Policy */}
