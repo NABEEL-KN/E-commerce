@@ -168,9 +168,9 @@ const Login = () => {
           alignItems: 'center',
         }}
       >
-        <Typography component="h1" variant="h4" sx={{ mb: 3, fontWeight: 'bold' }}>
-          Welcome Back
-        </Typography>
+        <StyledTitle component="h1" variant="h4">
+          Welcome to ShopSmart
+        </StyledTitle>
         {error && (
           <Alert severity="error" sx={{ mt: 2 }}>
             {error}
