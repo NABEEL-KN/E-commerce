@@ -7,12 +7,12 @@ import { Box, Typography, Grid, Stack } from '@mui/material';
 const FilteredProductsList = ({ products = [] }) => {
   const { isLoading, error } = useGetProductsQuery();
   const { 
-    searchQuery, 
-    selectedCategory, 
-    priceRange,
-    viewMode,
-    sortOption
-  } = useSelector((state) => state.filters);
+    searchQuery = '', 
+    selectedCategory = null, 
+    priceRange = { min: 0, max: 10000 },
+    viewMode = 'grid',
+    sortOption = 'title_asc'
+  } = useSelector((state) => state.filters || {});
 
   // Filter products
   const filteredProducts = products.filter((product) => {

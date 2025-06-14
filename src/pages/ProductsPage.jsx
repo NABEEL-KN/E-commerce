@@ -50,14 +50,14 @@ const ProductsPage = () => {
     error: productsError 
   } = useGetProductsQuery();
 
-  // Get filter state from Redux
+  // Get filter state from Redux with default values
   const { 
-    searchQuery, 
-    selectedCategory, 
-    priceRange,
-    viewMode,
-    sortOption
-  } = useSelector((state) => state.filters);
+    searchQuery = '', 
+    selectedCategory = null, 
+    priceRange = { min: 0, max: 10000 },
+    viewMode = 'grid',
+    sortOption = 'title_asc'
+  } = useSelector((state) => state.filters || {});
 
   // Handlers
   const handleSearch = (e) => {
