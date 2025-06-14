@@ -117,13 +117,44 @@ const ProductCard = ({ product, loading = false, viewMode = 'grid' }) => {
         flexDirection: isListView ? 'column' : 'column',
         alignItems: 'center',
         justifyContent: 'space-between',
+        position: 'relative',
+        '&:hover .favorite-button': {
+          opacity: 1,
+        }
       }}
       onClick={handleClick}
     >
+      <IconButton
+        className="favorite-button"
+        onClick={handleToggleFavorite}
+        sx={{
+          position: 'absolute',
+          top: 8,
+          right: 8,
+          zIndex: 1,
+          backgroundColor: 'rgba(255, 255, 255, 0.8)',
+          opacity: isFavorite ? 1 : 0,
+          transition: 'opacity 0.2s ease-in-out',
+          '&:hover': {
+            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+          },
+        }}
+      >
+        {isFavorite ? (
+          <Favorite color="error" />
+        ) : (
+          <FavoriteBorder color="action" />
+        )}
+      </IconButton>
       <CardMedia
         component="img"
-        height={isListView ? 200 : 250}
-        width={isListView ? '100%' : 'auto'}
+        sx={{
+          height: isListView ? 200 : 300,
+          width: '100%',
+          objectFit: 'contain',
+          p: 2,
+          bgcolor: 'background.paper'
+        }}
         image={product?.image || '/placeholder.jpg'}
         alt={product?.title || 'Product'}
       />
@@ -178,18 +209,11 @@ const ProductCard = ({ product, loading = false, viewMode = 'grid' }) => {
       </CardContent>
       <CardActions
         sx={{
-          justifyContent: 'space-between',
+          justifyContent: 'flex-end',
           p: isListView ? 2 : 1.5,
-          display: isListView ? 'flex' : 'block',
+          display: 'flex',
         }}
       >
-        <IconButton
-          onClick={handleToggleFavorite}
-          color="primary"
-          sx={{ ml: isListView ? 0 : 1 }}
-        >
-          {isFavorite ? <Favorite /> : <FavoriteBorder />}
-        </IconButton>
         <Button
           variant="contained"
           color="primary"
