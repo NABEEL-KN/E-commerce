@@ -66,8 +66,11 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create('width'),
     width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      width: '30ch',
+    },
     [theme.breakpoints.up('md')]: {
-      width: '20ch',
+      width: '40ch',
     },
   },
 }));
@@ -242,48 +245,65 @@ const Header = () => {
   return (
     <Box sx={{ width: '100%', m: 0, p: 0 }}>
       <AppBar position="static" sx={{ width: '100%', m: 0 }}>
-        <Toolbar sx={{ width: '100%', m: 0, p: 0 }}>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            sx={{ mr: 1 }}
-            onClick={handleDrawerToggle}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            variant="h6"
-            noWrap
-            component={RouterLink}
-            to="/"
-            sx={{
-              display: { xs: 'none', sm: 'block' },
-              textDecoration: 'none',
-              color: 'inherit',
-            }}
-          >
-            ShopSmart
-          </Typography>
-          <form onSubmit={handleSearchSubmit}>
-            <Search>
-              <SearchIconWrapper>
-                <SearchIcon />
-              </SearchIconWrapper>
-              <StyledInputBase
-                placeholder="Search…"
-                inputProps={{ 'aria-label': 'search' }}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </Search>
-          </form>
-          <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <Button color="inherit" component={RouterLink} to="/products">
-              Products
-            </Button>
+        <Toolbar sx={{ 
+          width: '100%', 
+          m: 0, 
+          p: 0,
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center'
+        }}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <IconButton
+              size="large"
+              edge="start"
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2 }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography
+              variant="h6"
+              noWrap
+              component={RouterLink}
+              to="/"
+              sx={{
+                display: { xs: 'none', sm: 'block' },
+                textDecoration: 'none',
+                color: 'inherit',
+                mr: 2
+              }}
+            >
+              ShopSmart
+            </Typography>
+          </Box>
+          
+          <Box sx={{ 
+            display: 'flex', 
+            flex: 1,
+            justifyContent: 'center',
+            maxWidth: '600px',
+            mx: 2
+          }}>
+            <form onSubmit={handleSearchSubmit} style={{ width: '100%' }}>
+              <Search>
+                <SearchIconWrapper>
+                  <SearchIcon />
+                </SearchIconWrapper>
+                <StyledInputBase
+                  placeholder="Search…"
+                  inputProps={{ 'aria-label': 'search' }}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  sx={{ width: '100%' }}
+                />
+              </Search>
+            </form>
+          </Box>
+          
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center' }}>
             <IconButton
               size="large"
               aria-label="show cart items"
