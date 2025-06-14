@@ -14,7 +14,6 @@ import CartPage from './pages/CartPage';
 import CheckoutPage from './pages/CheckoutPage';
 import LoginForm from './components/user/LoginForm';
 import RegisterForm from './components/user/RegisterForm';
-import ProfilePage from './pages/ProfilePage';
 
 // Pages to be implemented
 const OrderHistoryPage = () => <div>Order History Page (to be implemented)</div>;
@@ -31,7 +30,6 @@ function App() {
         <Route path="checkout" element={<CheckoutPage />} />
         <Route path="login" element={<LoginForm />} />
         <Route path="register" element={<RegisterForm />} />
-        <Route path="profile" element={<ProfilePage />} />
         <Route path="orders" element={<OrderHistoryPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>

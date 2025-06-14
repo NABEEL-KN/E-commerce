@@ -20,11 +20,11 @@ import { ViewList, ViewModule } from '@mui/icons-material';
 const FilterSidebar = ({ categories }) => {
   const dispatch = useDispatch();
   const { 
-    searchQuery, 
-    selectedCategory, 
-    priceRange,
-    viewMode
-  } = useSelector((state) => state.filters);
+    searchQuery = '', 
+    selectedCategory = null, 
+    priceRange = { min: 0, max: 10000 },
+    viewMode = 'grid'
+  } = useSelector((state) => state.filters || {});
 
   const handleSearchChange = (e) => {
     const value = e.target.value;
