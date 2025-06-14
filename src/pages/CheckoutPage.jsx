@@ -76,9 +76,19 @@ const CheckoutPage = () => {
   const SHIPPING_THRESHOLD = 50;
   const SHIPPING_FEE = 5.99;
   
-  const tax = subtotal * TAX_RATE;
-  const shipping = subtotal > SHIPPING_THRESHOLD ? 0 : SHIPPING_FEE;
-  const total = subtotal + tax + shipping;
+  // Calculate prices with proper number handling and type conversion
+  const calculateSubtotal = () => {
+    return items.reduce((sum, item) => {
+      const price = parseFloat(item.price) || 0;
+      const quantity = parseInt(item.quantity, 10) || 0;
+      return sum + (price * quantity);
+    }, 0);
+  };
+
+  const safeSubtotal = calculateSubtotal();
+  const tax = parseFloat((safeSubtotal * TAX_RATE).toFixed(2));
+  const shipping = safeSubtotal > SHIPPING_THRESHOLD ? 0 : SHIPPING_FEE;
+  const total = parseFloat((safeSubtotal + tax + shipping).toFixed(2));
 
   useEffect(() => {
     if (totalItems === 0 && activeStep === 0) {
@@ -148,24 +158,81 @@ const CheckoutPage = () => {
         </Box>
       ))}
       <Divider sx={{ my: 2 }} />
-      <Box display="flex" justifyContent="space-between" mb={1}>
-        <Typography>Subtotal:</Typography>
-        <Typography>{formatPrice(subtotal)}</Typography>
-      </Box>
-      <Box display="flex" justifyContent="space-between" mb={1}>
-        <Typography>Shipping:</Typography>
-        <Typography>
-          {shipping === 0 ? 'Free' : formatPrice(shipping)}
-        </Typography>
-      </Box>
-      <Box display="flex" justifyContent="space-between" mb={1}>
-        <Typography>Tax:</Typography>
-        <Typography>{formatPrice(tax)}</Typography>
-      </Box>
-      <Divider sx={{ my: 2 }} />
-      <Box display="flex" justifyContent="space-between" mb={2}>
-        <Typography variant="h6">Total:</Typography>
-        <Typography variant="h6">{formatPrice(total)}</Typography>
+      <Box sx={{ mb: 3 }}>
+        <Paper elevation={0} sx={{ p: 3, bgcolor: 'background.paper', borderRadius: 2 }}>
+          <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, mb: 2 }}>
+            Order Summary
+          </Typography>
+          
+          {/* Items List */}
+          {items.map((item) => (
+            <Box key={item.id} display="flex" justifyContent="space-between" mb={2}>
+              <Box display="flex" alignItems="center">
+                <img 
+                  src={item.image} 
+                  alt={item.title}
+                  style={{ width: 50, height: 50, objectFit: 'cover', marginRight: 12, borderRadius: 4 }}
+                />
+                <Box>
+                  <Typography variant="body1">{item.title}</Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    {item.quantity} × {formatPrice(item.price)}
+                  </Typography>
+                </Box>
+              </Box>
+              <Typography variant="body1">
+                {formatPrice(item.price * item.quantity)}
+              </Typography>
+            </Box>
+          ))}
+          
+          <Divider sx={{ my: 2 }} />
+          
+          {/* Price Breakdown */}
+          <Box sx={{ '& > *:not(:last-child)': { mb: 1.5 } }}>
+            {/* Subtotal */}
+            <Box display="flex" justifyContent="space-between">
+              <Typography>Subtotal ({totalItems} {totalItems === 1 ? 'item' : 'items'}):</Typography>
+              <Typography>{formatPrice(safeSubtotal)}</Typography>
+            </Box>
+            
+            {/* Shipping */}
+            <Box display="flex" justifyContent="space-between">
+              <Typography>Shipping:</Typography>
+              <Typography color={shipping === 0 ? 'success.main' : 'inherit'}>
+                {shipping === 0 ? 'Free' : formatPrice(shipping)}
+              </Typography>
+            </Box>
+            
+            {/* Tax */}
+            <Box display="flex" justifyContent="space-between">
+              <Typography>Tax ({Math.round(TAX_RATE * 100)}%):</Typography>
+              <Typography>{formatPrice(tax)}</Typography>
+            </Box>
+            
+            <Divider sx={{ my: 2 }} />
+            
+            {/* Order Total */}
+            <Box display="flex" justifyContent="space-between" alignItems="center">
+              <Typography variant="h6" fontWeight={600}>
+                Order Total:
+              </Typography>
+              <Typography 
+                variant="h6" 
+                fontWeight={700}
+                color="primary"
+              >
+                {formatPrice(total)}
+              </Typography>
+            </Box>
+            
+            {shipping === 0 && safeSubtotal > 0 && (
+              <Typography variant="caption" color="success.main" display="block" textAlign="right">
+                🎉 Free shipping on orders over {formatPrice(SHIPPING_THRESHOLD)}
+              </Typography>
+            )}
+          </Box>
+        </Paper>
       </Box>
     </>
   );
