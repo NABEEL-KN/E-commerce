@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import { Box } from '@mui/material';
 import Header from './Header';
+import Navbar from './Navbar';
 import Footer from './Footer';
 
 /**
@@ -21,6 +22,7 @@ const Layout = () => {
       }}
     >
       <Header />
+      <Navbar />
       <Box
         component="main"
         sx={{
